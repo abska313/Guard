@@ -115,7 +115,7 @@ const play={ok:()=>[523,659,784,1047].forEach((f,i)=>tone(f,i*.08,.12)),no:()=>[
 const hs=n=>'<span class="h">'+'♥'.repeat(n)+'<i>'+'♥'.repeat(3-n)+'</i></span>';
 function start(){app.innerHTML=`<h1 class="title">⚔ حارس التدقيق ⚔</h1>
 <div class="px arena" style="height:130px">${sp(A,AC,6)}${sp(M,MC,6)}</div>
-<div class="px c">جامعة بابل<br>كلية الإدارة والاقتصاد — قسم المحاسبة<br>إعداد الطالبين: عباس مصطفى و مصطفى لؤي<br><span style="color:var(--gd)">المادة: معايير التدقيق الدولي (من معيار 200 إلى معيار 315)</span></div>
+<div class="px c">جامعة بابل<br>كلية الإدارة والاقتصاد — قسم المحاسبة<br>إعداد:عباس مصطفى  <br><span style="color:var(--gd)">المادة: معايير التدقيق الدولي (من معيار 200 إلى معيار 315)</span></div>
 <div class="px c">10 مستويات • 41 سؤالاً • 3 قلوب لكل مستوى • 100 XP لكل إجابة<br>اهزم وحش التحريف المالي بالمعرفة!</div>
 <button class="go" data-a="start">ابدأ اللعب ▶</button>`}
 function lv(){const L=Q[S.i][S.j];S.o=L.o.map((t,k)=>({t,c:!k})).sort(()=>Math.random()-.5);S.ans=false;
