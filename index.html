@@ -1,795 +1,2025 @@
+```html
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>رحلة المراجع - مغامرة المعايير الدولية</title>
-<style>
-* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Arial, sans-serif; }
-body {
-  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #667eea 100%);
-  min-height: 100vh;
-  color: #fff;
-  overflow-x: hidden;
-}
-.container {
-  max-width: 900px;
-  margin: 20px auto;
-  padding: 15px;
-}
-.screen {
-  display: none;
-  animation: fadeIn 0.6s ease;
-}
-.screen.active { display: block; }
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-@keyframes pulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-}
-@keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-10px); }
-  75% { transform: translateX(10px); }
-}
-@keyframes bounce {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-15px); }
-}
-.welcome-card {
-  background: rgba(255,255,255,0.15);
-  backdrop-filter: blur(15px);
-  border-radius: 25px;
-  padding: 40px 25px;
-  text-align: center;
-  border: 2px solid rgba(255,255,255,0.25);
-  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-}
-.welcome-card h1 {
-  font-size: 2.2em;
-  margin-bottom: 15px;
-  background: linear-gradient(45deg, #ffd700, #ffed4e);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-.welcome-card .emoji {
-  font-size: 4em;
-  display: block;
-  margin: 20px 0;
-  animation: bounce 2s infinite;
-}
-.welcome-card p {
-  font-size: 1.1em;
-  line-height: 1.8;
-  margin-bottom: 20px;
-  color: #f0f0f0;
-}
-.story-box {
-  background: rgba(0,0,0,0.3);
-  border-radius: 15px;
-  padding: 20px;
-  margin: 20px 0;
-  border-right: 5px solid #ffd700;
-  text-align: right;
-  line-height: 1.9;
-}
-.btn {
-  background: linear-gradient(45deg, #ffd700, #ffed4e);
-  color: #1e3c72;
-  border: none;
-  padding: 15px 40px;
-  font-size: 1.2em;
-  font-weight: bold;
-  border-radius: 50px;
-  cursor: pointer;
-  margin: 10px;
-  transition: all 0.3s;
-  box-shadow: 0 5px 20px rgba(255,215,0,0.4);
-}
-.btn:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(255,215,0,0.6); }
-.btn:active { transform: translateY(0); }
-.btn-secondary {
-  background: rgba(255,255,255,0.2);
-  color: #fff;
-  border: 2px solid #fff;
-}
-.btn-secondary:hover { background: rgba(255,255,255,0.3); }
-
-/* شريط التقدم */
-.progress-bar {
-  background: rgba(255,255,255,0.2);
-  border-radius: 50px;
-  height: 25px;
-  margin: 15px 0;
-  overflow: hidden;
-  position: relative;
-}
-.progress-fill {
-  background: linear-gradient(90deg, #00c853, #64dd17);
-  height: 100%;
-  transition: width 0.5s;
-  border-radius: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
-  color: #fff;
-  font-size: 0.85em;
-}
-.stats {
-  display: flex;
-  justify-content: space-around;
-  background: rgba(255,255,255,0.15);
-  padding: 15px;
-  border-radius: 15px;
-  margin-bottom: 20px;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-.stat-item {
-  text-align: center;
-  flex: 1;
-  min-width: 80px;
-}
-.stat-item .num {
-  font-size: 1.8em;
-  font-weight: bold;
-  color: #ffd700;
-}
-.stat-item .label {
-  font-size: 0.85em;
-  opacity: 0.9;
-}
-
-/* بطاقة المحطة */
-.station-card {
-  background: rgba(255,255,255,0.15);
-  backdrop-filter: blur(15px);
-  border-radius: 20px;
-  padding: 25px;
-  border: 2px solid rgba(255,255,255,0.25);
-  box-shadow: 0 15px 40px rgba(0,0,0,0.3);
-}
-.station-header {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  margin-bottom: 20px;
-  padding-bottom: 15px;
-  border-bottom: 2px dashed rgba(255,255,255,0.3);
-  flex-wrap: wrap;
-}
-.station-icon {
-  font-size: 3em;
-  animation: pulse 2s infinite;
-}
-.station-info h2 {
-  font-size: 1.4em;
-  color: #ffd700;
-  margin-bottom: 5px;
-}
-.station-info .standard-num {
-  background: #ffd700;
-  color: #1e3c72;
-  padding: 3px 12px;
-  border-radius: 20px;
-  font-weight: bold;
-  font-size: 0.9em;
-  display: inline-block;
-}
-.story-text {
-  background: rgba(0,0,0,0.25);
-  padding: 15px;
-  border-radius: 12px;
-  margin: 15px 0;
-  line-height: 1.8;
-  font-size: 1em;
-  border-right: 4px solid #ffd700;
-}
-.question-card {
-  background: rgba(255,255,255,0.1);
-  border-radius: 15px;
-  padding: 20px;
-  margin: 15px 0;
-}
-.question-text {
-  font-size: 1.15em;
-  margin-bottom: 18px;
-  line-height: 1.7;
-  font-weight: 600;
-}
-.options {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-.option {
-  background: rgba(255,255,255,0.1);
-  border: 2px solid rgba(255,255,255,0.3);
-  padding: 14px 18px;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: all 0.3s;
-  text-align: right;
-  font-size: 1em;
-  line-height: 1.5;
-}
-.option:hover {
-  background: rgba(255,255,255,0.2);
-  transform: translateX(-5px);
-  border-color: #ffd700;
-}
-.option.correct {
-  background: linear-gradient(45deg, #00c853, #64dd17);
-  border-color: #00c853;
-  animation: pulse 0.5s;
-}
-.option.wrong {
-  background: linear-gradient(45deg, #d32f2f, #f44336);
-  border-color: #d32f2f;
-  animation: shake 0.5s;
-}
-.option.disabled { pointer-events: none; opacity: 0.7; }
-.feedback {
-  padding: 15px;
-  border-radius: 12px;
-  margin-top: 15px;
-  display: none;
-  line-height: 1.7;
-  animation: fadeIn 0.5s;
-}
-.feedback.show { display: block; }
-.feedback.correct { background: rgba(0,200,83,0.3); border: 2px solid #00c853; }
-.feedback.wrong { background: rgba(211,47,47,0.3); border: 2px solid #d32f2f; }
-.feedback strong { color: #ffd700; }
-
-/* شاشة النهاية */
-.final-card {
-  background: rgba(255,255,255,0.15);
-  backdrop-filter: blur(15px);
-  border-radius: 25px;
-  padding: 40px 25px;
-  text-align: center;
-  border: 2px solid rgba(255,255,255,0.25);
-}
-.final-card .trophy {
-  font-size: 5em;
-  animation: bounce 1.5s infinite;
-}
-.final-card h1 {
-  font-size: 2em;
-  margin: 15px 0;
-  color: #ffd700;
-}
-.grade {
-  font-size: 3em;
-  font-weight: bold;
-  margin: 20px 0;
-  padding: 20px;
-  border-radius: 20px;
-  background: rgba(0,0,0,0.3);
-}
-.grade.excellent { color: #00c853; }
-.grade.good { color: #ffd700; }
-.grade.pass { color: #ff9800; }
-.grade.fail { color: #f44336; }
-
-/* خريطة المحطات */
-.map-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-  gap: 12px;
-  margin: 20px 0;
-}
-.map-station {
-  background: rgba(255,255,255,0.15);
-  padding: 15px 10px;
-  border-radius: 12px;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.3s;
-  border: 2px solid transparent;
-}
-.map-station:hover {
-  transform: translateY(-5px);
-  background: rgba(255,255,255,0.25);
-  border-color: #ffd700;
-}
-.map-station.completed {
-  background: rgba(0,200,83,0.3);
-  border-color: #00c853;
-}
-.map-station.current {
-  background: rgba(255,215,0,0.3);
-  border-color: #ffd700;
-  animation: pulse 1.5s infinite;
-}
-.map-station.locked {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-.map-station .icon { font-size: 2em; display: block; margin-bottom: 5px; }
-.map-station .name { font-size: 0.85em; font-weight: bold; }
-.map-station .num { font-size: 0.75em; opacity: 0.8; }
-
-/* Responsive */
-@media (max-width: 600px) {
-  .welcome-card h1 { font-size: 1.6em; }
-  .welcome-card .emoji { font-size: 3em; }
-  .btn { padding: 12px 25px; font-size: 1em; }
-  .station-icon { font-size: 2.5em; }
-  .station-info h2 { font-size: 1.1em; }
-  .question-text { font-size: 1em; }
-  .option { font-size: 0.9em; padding: 12px 14px; }
-  .grade { font-size: 2em; }
-  .map-grid { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); }
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>أسطورة مدقق الحسابات: رحلة أبراج المعايير العشرة</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts for Retro & Arabic Pixel Feel -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-user-select: none;
+            image-rendering: pixelated;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #0b0c10;
+            color: #e0e6ed;
+            font-family: 'Cairo', sans-serif;
+            overflow: hidden;
+            touch-action: none;
+        }
+        .pixel-font {
+            font-family: 'Press Start 2P', cursive;
+        }
+        /* Retro CRT Scanlines Effect (Togglable) */
+        .crt::after {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
+            background-size: 100% 4px;
+            z-index: 40;
+            pointer-events: none;
+            opacity: 0.6;
+        }
+        /* Custom Pixel Borders */
+        .pixel-box {
+            box-shadow: 
+                0 -4px 0 0 #1f2937,
+                0 4px 0 0 #1f2937,
+                -4px 0 0 0 #1f2937,
+                4px 0 0 0 #1f2937,
+                0 0 0 4px #000;
+        }
+        .pixel-box-gold {
+            box-shadow: 
+                0 -4px 0 0 #d97706,
+                0 4px 0 0 #d97706,
+                -4px 0 0 0 #d97706,
+                4px 0 0 0 #d97706,
+                0 0 0 4px #78350f;
+        }
+        .pixel-btn {
+            position: relative;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.05s ease, filter 0.1s ease;
+            box-shadow: inset -3px -3px 0px 0px rgba(0,0,0,0.5), inset 3px 3px 0px 0px rgba(255,255,255,0.25);
+        }
+        .pixel-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: inset 3px 3px 0px 0px rgba(0,0,0,0.5);
+        }
+        /* Scrollbar Styling for Modals */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #111827;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #374151;
+            border-radius: 4px;
+            border: 1px solid #1f2937;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #4b5563;
+        }
+        /* Glow animations */
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 0.8; filter: drop-shadow(0 0 6px #f59e0b); }
+            50% { opacity: 1; filter: drop-shadow(0 0 14px #fbbf24); }
+        }
+        .glow-effect {
+            animation: pulseGlow 2s infinite ease-in-out;
+        }
+    </style>
 </head>
-<body>
-<div class="container">
+<body class="w-screen h-screen relative select-none">
 
-<!-- شاشة الترحيب -->
-<div class="screen active" id="welcomeScreen">
-  <div class="welcome-card">
-    <span class="emoji">🕵️‍♂️📊</span>
-    <h1>رحلة المراجع</h1>
-    <p><strong>مغامرة المعايير الدولية للمراجعة (200 - 315)</strong></p>
-    <div class="story-box">
-      <p>🎬 <strong>القصة:</strong> أنت مراجع حسابات شاب طموح، تلقيت اتصالاً من شركة غامضة اسمها "النجم الساطع" لتراجع قوائمها المالية. لكن الطريق محفوف بالمخاطر!</p>
-      <p>🗺️ ستنتقل بين <strong>10 محطات</strong> (معايير)، في كل محطة سؤال يختبر معرفتك. أجب بشكل صحيح لتنتقل للمحطة التالية وتجمع النقاط!</p>
-      <p>🏆 هدفك: الوصول إلى النهاية بأكبر عدد من النقاط لتصبح <strong>"المراجع maestro"</strong>!</p>
+    <!-- GAME CANVAS CONTAINER -->
+    <div id="game-container" class="relative w-full h-full crt overflow-hidden flex items-center justify-center bg-gray-950">
+        <canvas id="gameCanvas" class="block w-full h-full"></canvas>
+
+        <!-- TOP HUD: Chamber Info & Progress -->
+        <header class="absolute top-2 left-2 right-2 flex flex-wrap justify-between items-center px-4 py-2 bg-gray-900/90 border-2 border-amber-600/80 rounded-lg shadow-2xl z-30 pointer-events-auto backdrop-blur-sm">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded bg-amber-950 border border-amber-500 flex items-center justify-center text-xl shadow-inner">
+                    📜
+                </div>
+                <div>
+                    <h1 id="chamber-title" class="text-sm md:text-base font-bold text-amber-400">غرفة المعيار (200): الأهداف العامة للمدقق</h1>
+                    <p id="chamber-subtitle" class="text-xs text-gray-300">استكشف المحاريب الأربعة وتحدث إلى حارس المعيار للعبور</p>
+                </div>
+            </div>
+
+            <!-- Stats & Quick Actions -->
+            <div class="flex items-center gap-3 mt-1 sm:mt-0">
+                <div class="flex items-center gap-1.5 bg-gray-800/90 px-3 py-1 rounded border border-gray-700 text-xs">
+                    <span class="text-amber-400 font-bold">التقدم:</span>
+                    <span id="standards-progress" class="text-emerald-400 font-bold font-mono">0 / 10</span>
+                </div>
+                <div class="flex items-center gap-1.5 bg-gray-800/90 px-3 py-1 rounded border border-gray-700 text-xs">
+                    <span class="text-yellow-400 font-bold">⭐ نقاط الخبرة:</span>
+                    <span id="player-exp" class="text-yellow-300 font-bold font-mono">0</span>
+                </div>
+                
+                <!-- HUD Buttons -->
+                <button id="btn-codex" class="pixel-btn px-2.5 py-1 bg-amber-700 hover:bg-amber-600 text-white text-xs font-bold rounded flex items-center gap-1" title="حقيبة المعايير للمراجعة الشاملة">
+                    <span>📖</span>
+                    <span class="hidden sm:inline">الحقيبة الشاملة</span>
+                </button>
+                <button id="btn-sound" class="pixel-btn p-1.5 bg-gray-700 hover:bg-gray-600 text-white text-xs rounded" title="كتم/تشغيل الصوت">
+                    🔊
+                </button>
+            </div>
+        </header>
+
+        <!-- PROMPT / INTERACTION HINT OVERLAY -->
+        <div id="interaction-prompt" class="hidden absolute bottom-24 sm:bottom-16 left-1/2 -translate-x-1/2 bg-amber-950/95 text-amber-200 border-2 border-amber-400 px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold shadow-2xl z-30 pointer-events-none flex items-center gap-2 animate-bounce">
+            <span class="bg-amber-500 text-gray-900 px-1.5 py-0.5 rounded font-mono text-xs font-black">E أو فِعل</span>
+            <span id="prompt-text">اضغط للمعاينة والتعلم</span>
+        </div>
+
+        <!-- ON-SCREEN MOBILE / TOUCH CONTROLS (Always visible on touch devices, transparent and intuitive) -->
+        <div id="touch-controls" class="absolute inset-x-0 bottom-3 px-4 flex justify-between items-end pointer-events-none z-30">
+            <!-- D-PAD -->
+            <div class="pointer-events-auto grid grid-cols-3 gap-1.5 w-36 h-36 bg-gray-900/60 p-2 rounded-2xl border border-gray-700/80 backdrop-blur-sm">
+                <div></div>
+                <button id="btn-up" class="pixel-btn bg-gray-800/90 active:bg-amber-600 text-amber-300 font-bold text-lg rounded-xl flex items-center justify-center">▲</button>
+                <div></div>
+                <button id="btn-left" class="pixel-btn bg-gray-800/90 active:bg-amber-600 text-amber-300 font-bold text-lg rounded-xl flex items-center justify-center">◀</button>
+                <div class="flex items-center justify-center text-gray-600 text-xs">🎮</div>
+                <button id="btn-right" class="pixel-btn bg-gray-800/90 active:bg-amber-600 text-amber-300 font-bold text-lg rounded-xl flex items-center justify-center">▶</button>
+                <div></div>
+                <button id="btn-down" class="pixel-btn bg-gray-800/90 active:bg-amber-600 text-amber-300 font-bold text-lg rounded-xl flex items-center justify-center">▼</button>
+                <div></div>
+            </div>
+
+            <!-- ACTION BUTTONS -->
+            <div class="pointer-events-auto flex flex-col gap-2">
+                <button id="btn-action" class="pixel-btn w-20 h-20 bg-gradient-to-br from-amber-500 to-amber-700 active:from-amber-600 active:to-amber-800 text-white font-black text-sm rounded-full shadow-2xl flex flex-col items-center justify-center border-2 border-amber-300">
+                    <span class="text-xl">⚔️</span>
+                    <span>تفاعل</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- TOAST / NOTIFICATION -->
+        <div id="game-toast" class="hidden absolute top-20 left-1/2 -translate-x-1/2 bg-gray-900/95 text-emerald-400 border border-emerald-500 px-6 py-2.5 rounded-xl text-sm font-bold shadow-2xl z-50 transition-all duration-300 transform -translate-y-2 pointer-events-none">
+            رسالة اللعبة
+        </div>
     </div>
-    <button class="btn" onclick="startGame()">🚀 ابدأ المغامرة</button>
-  </div>
-</div>
 
-<!-- شاشة الخريطة -->
-<div class="screen" id="mapScreen">
-  <div class="station-card">
-    <h2 style="text-align:center; color:#ffd700; margin-bottom:15px;">🗺️ خريطة الرحلة</h2>
-    <div class="stats">
-      <div class="stat-item"><div class="num" id="mapScore">0</div><div class="label">النقاط</div></div>
-      <div class="stat-item"><div class="num" id="mapCorrect">0</div><div class="label">إجابات صحيحة</div></div>
-      <div class="stat-item"><div class="num" id="mapStations">0/10</div><div class="label">محطات مكتملة</div></div>
+    <!-- ============================================================== -->
+    <!-- MODAL 1: RETRO STUDY STATION (DEFINITIONS / EXPLANATION / ENUMERATION) -->
+    <!-- ============================================================== -->
+    <div id="station-modal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-3">
+        <div class="bg-gray-900 border-4 border-amber-600 rounded-xl w-full max-w-2xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden pixel-box">
+            <!-- Modal Header -->
+            <div class="bg-amber-950/90 border-b-2 border-amber-600 px-4 py-3 flex justify-between items-center">
+                <div class="flex items-center gap-2">
+                    <span id="station-icon" class="text-2xl">🏛️</span>
+                    <h2 id="station-title" class="text-base sm:text-lg font-bold text-amber-300">عنوان المحراب</h2>
+                </div>
+                <button id="btn-close-station" class="pixel-btn bg-red-800 hover:bg-red-700 text-white text-xs px-2.5 py-1 rounded font-bold">
+                    إغلاق [ESC] ✕
+                </button>
+            </div>
+
+            <!-- Modal Content (Scrollable) -->
+            <div id="station-body" class="p-4 sm:p-6 overflow-y-auto space-y-4 text-gray-200 text-sm leading-relaxed">
+                <!-- Dynamically populated -->
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="bg-gray-950 px-4 py-3 border-t border-gray-800 flex justify-between items-center">
+                <span class="text-xs text-amber-500/80">💡 تمت إضافة هذه المعارف إلى حقيبتك الامتحانِية</span>
+                <button id="btn-confirm-station" class="pixel-btn px-5 py-2 bg-emerald-700 hover:bg-emerald-600 text-white font-bold text-xs rounded">
+                    فهمت واستوعبت المادة ✓
+                </button>
+            </div>
+        </div>
     </div>
-    <div class="map-grid" id="mapGrid"></div>
-    <div style="text-align:center; margin-top:15px;">
-      <button class="btn" onclick="goToCurrentStation()">📍 المحطة الحالية</button>
+
+    <!-- ============================================================== -->
+    <!-- MODAL 2: FILL-IN-THE-BLANKS EXAM GATE (NO MULTIPLE CHOICE) -->
+    <!-- ============================================================== -->
+    <div id="exam-modal" class="hidden fixed inset-0 bg-black/85 backdrop-blur-sm z-50 flex items-center justify-center p-3">
+        <div class="bg-gray-900 border-4 border-indigo-600 rounded-xl w-full max-w-2xl max-h-[92vh] flex flex-col shadow-2xl overflow-hidden pixel-box">
+            <!-- Modal Header -->
+            <div class="bg-indigo-950/90 border-b-2 border-indigo-600 px-4 py-3 flex justify-between items-center">
+                <div class="flex items-center gap-2">
+                    <span class="text-2xl">📜</span>
+                    <div>
+                        <h2 id="exam-title" class="text-base sm:text-lg font-bold text-indigo-300">امتحان الفراغات: بوابة المعيار</h2>
+                        <p class="text-xs text-gray-400">أكمل العبارات التدقيقية لفتح قفل البوابة وحصد نقاط الامتحان</p>
+                    </div>
+                </div>
+                <button id="btn-close-exam" class="pixel-btn bg-red-800 hover:bg-red-700 text-white text-xs px-2.5 py-1 rounded font-bold">
+                    إغلاق ✕
+                </button>
+            </div>
+
+            <!-- Modal Content -->
+            <div id="exam-body" class="p-4 sm:p-6 overflow-y-auto space-y-5 text-sm">
+                <!-- Injected via JavaScript -->
+            </div>
+
+            <!-- Modal Footer with action buttons -->
+            <div class="bg-gray-950 px-4 py-3 border-t border-gray-800 flex flex-wrap justify-between items-center gap-2">
+                <button id="btn-show-solutions" class="pixel-btn px-3 py-1.5 bg-gray-800 hover:bg-gray-700 text-amber-300 text-xs font-bold rounded border border-gray-600">
+                    🔍 كشف الإجابات النموذجية للمراجعة
+                </button>
+                <button id="btn-submit-exam" class="pixel-btn px-5 py-2 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs rounded">
+                    تحقق وتأكيد الإجابات 🗝️
+                </button>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
 
-<!-- شاشة المحطة -->
-<div class="screen" id="stationScreen">
-  <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%">0%</div></div>
-  <div class="stats">
-    <div class="stat-item"><div class="num" id="score">0</div><div class="label">النقاط</div></div>
-    <div class="stat-item"><div class="num" id="correct">0</div><div class="label">صحيحة</div></div>
-    <div class="stat-item"><div class="num" id="wrong">0</div><div class="label">خاطئة</div></div>
-  </div>
-  <div class="station-card">
-    <div class="station-header">
-      <span class="station-icon" id="stationIcon">📍</span>
-      <div class="station-info">
-        <span class="standard-num" id="standardNum">ISA 200</span>
-        <h2 id="stationTitle">عنوان المحطة</h2>
-      </div>
+    <!-- ============================================================== -->
+    <!-- MODAL 3: GUARDIAN NPC RETRO DIALOGUE BOX -->
+    <!-- ============================================================== -->
+    <div id="dialogue-modal" class="hidden fixed inset-x-0 bottom-4 sm:bottom-8 z-50 flex justify-center px-4">
+        <div class="bg-gray-900/98 border-4 border-amber-500 rounded-xl w-full max-w-2xl p-4 shadow-2xl pixel-box flex gap-4 items-start">
+            <!-- Guardian Avatar -->
+            <div class="flex-shrink-0 flex flex-col items-center">
+                <div class="w-16 h-16 sm:w-20 sm:h-20 bg-gray-800 border-2 border-amber-400 rounded-lg overflow-hidden flex items-center justify-center text-3xl shadow-md">
+                    🧙‍♂️
+                </div>
+                <span id="guardian-name" class="text-xs font-bold text-amber-400 mt-1">حارس المعيار</span>
+            </div>
+
+            <!-- Dialogue Text & Actions -->
+            <div class="flex-grow flex flex-col justify-between min-h-[90px]">
+                <div id="dialogue-text" class="text-gray-100 text-sm leading-relaxed mb-3">
+                    مرحباً بك أيها المدقق المبتدئ...
+                </div>
+                <div class="flex justify-end gap-2">
+                    <button id="btn-dialogue-action" class="pixel-btn px-4 py-1.5 bg-amber-600 hover:bg-amber-500 text-white font-bold text-xs rounded">
+                        متابعة ▶
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="story-text" id="storyText">قصة المحطة...</div>
-    <div class="question-card">
-      <div class="question-text" id="questionText">السؤال...</div>
-      <div class="options" id="optionsContainer"></div>
-      <div class="feedback" id="feedback"></div>
+
+    <!-- ============================================================== -->
+    <!-- MODAL 4: FULL STUDY DOSSIER / AUDITOR'S CODEX (حقيبة المعايير) -->
+    <!-- ============================================================== -->
+    <div id="codex-modal" class="hidden fixed inset-0 bg-black/90 backdrop-blur-md z-50 flex items-center justify-center p-2 sm:p-4">
+        <div class="bg-gray-900 border-4 border-amber-500 rounded-xl w-full max-w-5xl h-[94vh] flex flex-col shadow-2xl overflow-hidden pixel-box">
+            <!-- Header -->
+            <div class="bg-amber-950 px-4 py-3 border-b-2 border-amber-600 flex justify-between items-center">
+                <div class="flex items-center gap-2">
+                    <span class="text-2xl">📚</span>
+                    <div>
+                        <h2 class="text-base sm:text-lg font-black text-amber-400">حقيبة المعايير العشرة الشاملة (ملف الامتحان المعتمد)</h2>
+                        <p class="text-xs text-gray-300">مرجعك الكامل للامتحان: تعاريف، شروحات دقيقة، تعدادات مفصلة، وفراغات مع الحلول</p>
+                    </div>
+                </div>
+                <button id="btn-close-codex" class="pixel-btn bg-red-800 hover:bg-red-700 text-white text-xs px-3 py-1.5 rounded font-bold">
+                    إغلاق الحقيبة ✕
+                </button>
+            </div>
+
+            <!-- Tabs for Standards 200 - 315 -->
+            <div class="bg-gray-950 p-2 border-b border-gray-800 flex gap-1 overflow-x-auto text-xs" id="codex-tabs">
+                <!-- Dynamically Generated Standard Buttons -->
+            </div>
+
+            <!-- Codex Content Area -->
+            <div id="codex-content" class="p-4 sm:p-6 overflow-y-auto flex-grow space-y-6 text-gray-200 text-sm leading-relaxed">
+                <!-- Injected via JavaScript -->
+            </div>
+
+            <!-- Footer -->
+            <div class="bg-gray-950 px-4 py-2 border-t border-gray-800 flex justify-between items-center text-xs text-gray-400">
+                <span>⭐ تم استخلاص المادة بدقة تامة من ملخص معايير التدقيق الدولية (المعايير الـ 10 الأولى).</span>
+                <span class="text-amber-400 font-bold">يمكنك المراجعة منها في أي وقت أثناء اللعب!</span>
+            </div>
+        </div>
     </div>
-    <div style="text-align:center; margin-top:15px;">
-      <button class="btn" id="nextBtn" onclick="nextStation()" style="display:none;">➡️ المحطة التالية</button>
-      <button class="btn btn-secondary" onclick="showMap()">🗺️ الخريطة</button>
+
+    <!-- ============================================================== -->
+    <!-- MODAL 5: FINAL VICTORY SCREEN (AFTER ALL 10 STANDARDS) -->
+    <!-- ============================================================== -->
+    <div id="victory-modal" class="hidden fixed inset-0 bg-black/95 backdrop-blur-md z-50 flex items-center justify-center p-4">
+        <div class="bg-gradient-to-b from-gray-900 to-amber-950 border-4 border-amber-400 rounded-2xl w-full max-w-xl p-6 sm:p-8 text-center pixel-box shadow-2xl">
+            <div class="text-6xl mb-4 animate-bounce">🏆</div>
+            <h2 class="text-2xl font-black text-amber-300 mb-2">مبارك! نلت لقب «كبير المدققين القانونيين»</h2>
+            <p class="text-sm text-gray-200 leading-relaxed mb-6">
+                لقد أنجزت بنجاح كامل جولات أبراج المعايير العشرة الأولى (من معيار 200 إلى معيار 315)! أصبحت الآن مستعداً تماماً لاجتياز الامتحان والحصول على أعلى الدرجات.
+            </p>
+            <div class="bg-gray-900/90 border border-amber-600/60 p-4 rounded-xl mb-6 text-xs text-amber-200 text-right space-y-2">
+                <p>✓ تم ضبط وحفظ كافة التعاريف الأساسية والأهداف العامة.</p>
+                <p>✓ إتقان شروط الارتباط ورقابة الجودة وتوثيق التدقيق وحفظ الملف (60 يوماً).</p>
+                <p>✓ التمييز الكامل بين مسؤوليات الاحتيال والخطأ ومراعاة القوانين والأنظمة.</p>
+                <p>✓ آليات التواصل مع المكلفين بالحوكمة والإدارة وإبلاغ أوجه القصور الهامة.</p>
+                <p>✓ التخطيط الاستراتيجي وفهم المنشأة وبيئتها لتقدير مخاطر التحريف الجوهري.</p>
+            </div>
+            <div class="flex justify-center gap-4">
+                <button id="btn-victory-codex" class="pixel-btn px-4 py-2 bg-amber-700 hover:bg-amber-600 text-white font-bold text-xs rounded">
+                    فتح الحقيبة للمراجعة النهائية 📖
+                </button>
+                <button id="btn-victory-restart" class="pixel-btn px-4 py-2 bg-emerald-700 hover:bg-emerald-600 text-white font-bold text-xs rounded">
+                    جولة جديدة في الأبراج 🔄
+                </button>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
 
-<!-- شاشة النهاية -->
-<div class="screen" id="finalScreen">
-  <div class="final-card">
-    <span class="trophy" id="trophyIcon">🏆</span>
-    <h1 id="finalTitle">انتهت الرحلة!</h1>
-    <p id="finalMessage" style="font-size:1.1em; line-height:1.8;"></p>
-    <div class="grade" id="finalGrade">-</div>
-    <div class="stats" style="margin-top:20px;">
-      <div class="stat-item"><div class="num" id="finalScore">0</div><div class="label">النقاط</div></div>
-      <div class="stat-item"><div class="num" id="finalCorrect">0</div><div class="label">صحيحة</div></div>
-      <div class="stat-item"><div class="num" id="finalTotal">0</div><div class="label">المجموع</div></div>
-    </div>
-    <button class="btn" onclick="restartGame()">🔄 إعادة اللعبة</button>
-    <button class="btn btn-secondary" onclick="showMap()">🗺️ مراجعة المحطات</button>
-  </div>
-</div>
+    <!-- ============================================================== -->
+    <!-- JAVASCRIPT GAME LOGIC & EXAM CURRICULUM DATA -->
+    <!-- ============================================================== -->
+    <script>
+        /* ============================================================
+           COMPREHENSIVE AUDIT STANDARDS CURRICULUM (ISA 200 - 315)
+           Extracted verbatim and thoroughly structured from the manual.
+           Strictly No Multiple Choice: Definitions, Explanations, Enumerations, Blanks.
+           ============================================================ */
+        const STANDARDS_DATA = [
+            {
+                id: 200,
+                num: "200",
+                title: "الأهداف العامة للمدقق المستقل والقيام بالتدقيق وفقاً لمعايير التدقيق",
+                color: "#f59e0b",
+                guardianName: "المدقق العام أرخميدس",
+                definitions: [
+                    {
+                        term: "الهدف العام من تدقيق البيانات المالية",
+                        desc: "تعزيز درجة ثقة المستخدمين المعنيين فيها، ويتحقق ذلك من خلال إبداء المدقق لرأيه فيما إذا كانت البيانات المالية قد تم إعدادها بصورة عادلة من جميع النواحي الجوهرية طبقاً لإطار التقرير المالي المعمول به."
+                    },
+                    {
+                        term: "التأكيد المعقول (Reasonable Assurance)",
+                        desc: "أعلى مستوى ممكن من التأكيد، ويتم الوصول إليه عندما يحصل المدقق على ما يكفي من أدلة التدقيق المناسبة لتخفيض خطر التدقيق إلى مستوى منخفض بشكل مقبول. وهو ليس تأكيداً مطلقاً نظراً لوجود قيود ملازمة للتدقيق."
+                    },
+                    {
+                        term: "خطر التدقيق (Audit Risk)",
+                        desc: "هو خطر أن يُصدر المدقق رأياً غير معدل (نظيف) في حين أن البيانات المالية محرفة بشكل جوهري."
+                    },
+                    {
+                        term: "الأهمية النسبية (Materiality)",
+                        desc: "تعتبر الأخطاء في البيانات المالية (بما في ذلك الحذف) مادية عندما يكون من المتوقع أن تؤثر - بمفردها أو في مجملها - على القرارات الاقتصادية التي يتخذها المستخدمون بالاعتماد على هذه البيانات."
+                    }
+                ],
+                explanation: [
+                    {
+                        heading: "طبيعة أدلة التدقيق ولماذا التأكيد ليس مطلقاً؟",
+                        text: "التأكيد المعقول لا يُعد مستوى مطلقاً من التأكيد، نظراً لوجود قيود ملازمة للتدقيق تتمثل في أن معظم أدلة التدقيق التي يعتمد عليها المدقق المستقل في استنتاجاته وتكوين رأيه هي أدلة 'مقنعة' وليست أدلة 'قطعية'."
+                    },
+                    {
+                        heading: "مسؤولية البيانات المالية الخاضعة للتدقيق",
+                        text: "البيانات المالية التي تخضع للتدقيق هي تلك الخاصة بالمنشأة والتي أعدتها الإدارة تحت إشراف المكلفين بالحوكمة. ولا يعفي تدقيق البيانات المالية الإدارة أو المكلفين بالحوكمة من مسؤولياتهم القانونية والمهنية."
+                    },
+                    {
+                        heading: "تطبيق مفهوم الأهمية النسبية",
+                        text: "يطبق المدقق مفهوم الأهمية النسبية عند تخطيط وتنفيذ عملية التدقيق، وعند تقييم أثر الأخطاء المكتشفة وغير المصححة. ورأي المدقق يتناول البيانات المالية ككل، لذا فإنه غير مسؤول عن اكتشاف التحريفات غير الجوهرية."
+                    }
+                ],
+                enumeration: [
+                    {
+                        heading: "الأهداف العامة للمدقق (هدفين رئيسيين)",
+                        items: [
+                            "الحصول على تأكيد معقول بشأن خلو البيانات المالية ككل من أي أخطاء جوهرية، سواء بسبب الاحتيال أو الخطأ، لتمكينه من إبداء رأيه العادل.",
+                            "إعداد تقرير عن البيانات المالية، والإبلاغ حسبما تتطلبه معايير التدقيق الدولية بما يتفق مع النتائج التي توصل إليها."
+                        ]
+                    },
+                    {
+                        heading: "متطلبات المسؤولية العامة للمدقق المستقل",
+                        items: [
+                            "ممارسة الحكم المهني، والمحافظة على مبدأ الشك المهني طوال تخطيط وتنفيذ التدقيق.",
+                            "التعرف على مخاطر وجود أخطاء جوهرية وتقديرها (سواء بسبب احتيال أو خطأ) استناداً إلى فهم المنشأة وبيئتها ورقابتها الداخلية.",
+                            "الحصول على ما يكفي من أدلة التدقيق المناسبة بتصميم وتنفيذ استجابات مناسبة للمخاطر المقدرة.",
+                            "تكوين رأي حول البيانات المالية استناداً إلى النتائج المستخلصة من أدلة التدقيق.",
+                            "الاتصال والتقرير للمستخدمين أو الإدارة أو المكلفين بالحوكمة أو جهات خارجية وفقاً للأنظمة والمعايير."
+                        ]
+                    }
+                ],
+                blanks: [
+                    {
+                        sentence: "الهدف العام من تدقيق البيانات المالية هو تعزيز درجة _____ المستخدمين المعنيين فيها.",
+                        answer: "ثقة",
+                        hint: "كلمة من خطوتين تعبر عن الاطمئنان والاعتماد"
+                    },
+                    {
+                        sentence: "التأكيد المعقول هو أعلى مستوى ممكن من التأكيد، وهو ليس تأكيداً _____ نظراً لوجود قيود ملازمة للتدقيق.",
+                        answer: "مطلقاً",
+                        hint: "عكس نسبي أو مقيد"
+                    },
+                    {
+                        sentence: "معظم أدلة التدقيق التي يعتمد عليها المدقق هي أدلة _____ أكثر منها أدلة قطعية.",
+                        answer: "مقنعة",
+                        hint: "توفر قناعة مهنية كافية"
+                    },
+                    {
+                        sentence: "يجب على المدقق ممارسة الحكم المهني والمحافظة على مبدأ _____ المهني خلال تخطيط وتنفيذ التدقيق.",
+                        answer: "الشك",
+                        hint: "الموقف التساؤلي واليقظة الذهنية"
+                    }
+                ]
+            },
+            {
+                id: 210,
+                num: "210",
+                title: "الاتفاق على شروط ارتباطات التدقيق",
+                color: "#06b6d4",
+                guardianName: "الموثق القانوني كولبرت",
+                definitions: [
+                    {
+                        term: "شروط الارتباط المسبقة (Preconditions for an Audit)",
+                        desc: "استخدام الإدارة لإطار مقبول للتقرير المالي في إعداد البيانات المالية، وموافقة الإدارة والمكلفين بالحوكمة على الأساس والمسؤوليات التي سيتم بموجبها تنفيذ التدقيق."
+                    },
+                    {
+                        term: "خطاب الارتباط (Engagement Letter)",
+                        desc: "اتفاق مكتوب يوثق شروط ارتباط التدقيق المتفق عليها بين المدقق والإدارة أو المكلفين بالحوكمة، لتفادي أي سوء تفاهم يخص مسؤوليات الطرفين ونطاق التدقيق."
+                    }
+                ],
+                explanation: [
+                    {
+                        heading: "التغيير في شروط ارتباط التدقيق",
+                        text: "يجب على المدقق عدم قبول التغيير في شروط ارتباط التدقيق ما لم توجد مبررات معقولة لذلك. وفي حال عدم موافقته ورفض الإدارة الاستمرار بالارتباط الأصلي، يجب على المدقق: 1) الانسحاب من الارتباط إذا كان ذلك ممكناً، 2) تحديد ما إذا كان عليه التزام تعاقدي أو قانوني بإبلاغ أطراف أخرى كالمكلفين بالحوكمة أو الملاك."
+                    },
+                    {
+                        heading: "عمليات التدقيق المتكررة (Recurring Audits)",
+                        text: "في عمليات التدقيق المتكررة، يقدر المدقق ما إذا كانت الظروف تتطلب إعادة النظر في شروط الارتباط، وما إذا كانت هناك حاجة لتذكير المنشأة بالشروط الحالية للارتباط بحسب الحجم أو التغيرات الإدارية."
+                    }
+                ],
+                enumeration: [
+                    {
+                        heading: "الشروط المسبقة للتدقيق التي يتوجب التحقق منها",
+                        items: [
+                            "تحديد ما إذا كان إطار التقرير المالي المعمول به في إعداد البيانات المالية مقبولاً.",
+                            "الحصول على موافقة الإدارة وإدراكها لمسؤوليتها عن: إعداد البيانات المالية طبقاً للإطار المعمول به (والعرض العادل).",
+                            "مسؤولية الإدارة عن الرقابة الداخلية الضرورية لإعداد بيانات مالية تخلو من تحريف جوهري.",
+                            "تمكين المدقق من الوصول غير المقيد لجميع السجلات والوثائق والأشخاص داخل المنشأة لطلب الأدلة."
+                        ]
+                    },
+                    {
+                        heading: "محتويات خطاب الارتباط الإلزامية الخمسة",
+                        items: [
+                            "هدف ونطاق تدقيق البيانات المالية.",
+                            "مسؤوليات المدقق المستقل.",
+                            "مسؤوليات الإدارة والمكلفين بالحوكمة.",
+                            "تحديد إطار التقرير المالي المعمول به في إعداد البيانات المالية.",
+                            "الإشارة إلى الشكل والمحتوى المتوقعين لأي تقارير سيصدرها المدقق، وبيان الظروف التي قد تغير شكل التقرير."
+                        ]
+                    }
+                ],
+                blanks: [
+                    {
+                        sentence: "يجب على المدقق عدم قبول التغيير في شروط الارتباط ما لم توجد _____ معقولة لذلك.",
+                        answer: "مبررات",
+                        hint: "أسباب مقنعة وموضوعية"
+                    },
+                    {
+                        sentence: "من الشروط المسبقة تمكين المدقق من الوصول _____ المقيد إلى جميع المعلومات والأشخاص المحددين.",
+                        answer: "غير",
+                        hint: "حرية كاملة دون موانع"
+                    },
+                    {
+                        sentence: "تسجل الشروط المتفق عليها لعملية التدقيق في وثيقة تسمى خطاب _____ .",
+                        answer: "الارتباط",
+                        hint: "وثيقة التعاقد والتكليف"
+                    }
+                ]
+            },
+            {
+                id: 220,
+                num: "220",
+                title: "رقابة الجودة لتدقيق البيانات المالية",
+                color: "#3b82f6",
+                guardianName: "حارس النزاهة والميثاق فالتر",
+                definitions: [
+                    {
+                        term: "الشريك المسؤول عن الارتباط (Engagement Partner)",
+                        desc: "الشريك أو الشخص المسؤول في مكتب التدقيق عن تنفيذ ارتباط التدقيق وإصدار التقرير المناسب، والمسؤول عن الجودة الشاملة للارتباط."
+                    },
+                    {
+                        term: "فاحص رقابة جودة الارتباط (EQCR)",
+                        desc: "شخص مؤهل ومحايد يتم تعيينه ليقوم قبل إصدار التقرير بتقييم موضوعي للأحكام والقرارات الهامة والاستنتاجات التي توصل إليها فريق التدقيق."
+                    }
+                ],
+                explanation: [
+                    {
+                        heading: "مسؤوليات القيادة عن جودة التدقيق",
+                        text: "يتحمل الشريك المسؤول عن الارتباط مسؤولية الجودة الشاملة لكل ارتباط تدقيق يكلف به، وإعطاء نموذج يُحتذى به في الالتزام الصارم بالمعايير المهنية والمتطلبات الأخلاقية."
+                    },
+                    {
+                        heading: "الاستقلالية والمهددات الأخلاقية",
+                        text: "يجب أن يظل الشريك متيقظاً بشأن عدم التزام فريق الارتباط بقواعد سلوك المهنة، وأن يتوصل إلى استنتاج بشأن الالتزام بمتطلبات الاستقلال، وتقييم أي علاقات تهدد الاستقلال وتطبيق إجراءات وقائية أو الانسحاب."
+                    }
+                ],
+                enumeration: [
+                    {
+                        heading: "مسؤوليات الشريك المسؤول عند أداء الارتباط",
+                        items: [
+                            "التوجيه والإشراف وأداء ارتباط التدقيق في إطار الالتزام بالمعايير المهنية والقانونية.",
+                            "التأكد من أن تقرير المدقق الصادر مناسب للظروف.",
+                            "تنفيذ الفحص وفقاً لسياسات المكتب، والتأكد من الحصول على ما يكفي من أدلة التدقيق المناسبة.",
+                            "قيام الفريق بإجراء التشاور المناسب في الأمور الصعبة وتوثيق نتائج الاستشارة وتنفيذها.",
+                            "تعيين فاحص لرقابة جودة الارتباط ومناقشة الأمور الجوهرية والأحكام الهامة واختلافات الرأي معه."
+                        ]
+                    },
+                    {
+                        heading: "كفاءة وتعيين فريق الارتباط",
+                        items: [
+                            "اقتناع الشريك بأن الفريق (وأي خبراء مستعان بهم) يمتلكون القدرات والكفاءات المناسبة.",
+                            "القدرة على تنفيذ الارتباط وفق المتطلبات التنظيمية وإصدار تقرير مناسب."
+                        ]
+                    }
+                ],
+                blanks: [
+                    {
+                        sentence: "يتحمل _____ المسؤول عن الارتباط مسؤولية الجودة الشاملة لكل عملية تدقيق.",
+                        answer: "الشريك",
+                        hint: "صاحب السلطة التنفيذية في المكتب"
+                    },
+                    {
+                        sentence: "يتم تعيين فاحص لرقابة جودة الارتباط لمناقشة الأمور _____ والأحكام المهمة قبل التقرير.",
+                        answer: "الجوهرية",
+                        hint: "الأمور ذات الأثر الكبير والبالغ"
+                    },
+                    {
+                        sentence: "يجب على الشريك اتخاذ إجراءات وقائية للقضاء على التهديدات التي تمس مبدأ _____ أو تخفيضها لمستوى مقبول.",
+                        answer: "الاستقلال",
+                        hint: "الحياد وعدم التبعية"
+                    }
+                ]
+            },
+            {
+                id: 230,
+                num: "230",
+                title: "توثيق أعمال التدقيق (ملف وأوراق العمل)",
+                color: "#10b981",
+                guardianName: "أمين المخطوطات الأرشيفية زاد",
+                definitions: [
+                    {
+                        term: "توثيق أعمال التدقيق (Audit Documentation)",
+                        desc: "سجل إجراءات التدقيق التي تم تنفيذها، وأدلة التدقيق ذات الصلة التي تم الحصول عليها، والاستنتاجات التي توصل إليها المدقق (أوراق العمل)."
+                    },
+                    {
+                        term: "مفهوم المدقق الخبير (Experienced Auditor)",
+                        desc: "المعيار الحاكم لكفاية التوثيق؛ حيث يجب إعداد أوراق تدقيق تمكّن مدققاً خبيراً ليس له اتصال سابق بالعملية من فهم طبيعة وتوقيت ومدى الإجراءات والنتائج والأحكام المهنية المتخذة."
+                    }
+                ],
+                explanation: [
+                    {
+                        heading: "قاعدة تجميع ملف التدقيق النهائي (60 يوماً)",
+                        text: "يجب استكمال العملية الإدارية لتجميع ملف التدقيق النهائي في الوقت المناسب، حيث يحدد معيار رقابة الجودة أن المدة القصوى هي 60 يوماً بعد تاريخ تقرير التدقيق. وبعد إتمام التجميع، يُحظر تماماً حذف أو إلغاء أي أوراق تدقيق قبل انتهاء مدة الاحتفاظ المقررة نظاماً."
+                    },
+                    {
+                        heading: "التوثيق في الوقت المناسب (أولاً بأول)",
+                        text: "توثيق الأعمال أولاً بأول يعزز جودة التدقيق ويسهل الفحص الفعال وتقييم الأدلة قبل صياغة التقرير بصورته النهائية، بدلاً من التوثيق اللاحق بعد انتهاء المهمة."
+                    }
+                ],
+                enumeration: [
+                    {
+                        heading: "أهداف وفوائد توثيق أعمال التدقيق الستة",
+                        items: [
+                            "مساعدة فريق الارتباط في تخطيط وتنفيذ التدقيق.",
+                            "مساعدة المسؤولين عن الإشراف في توجيه ومتابعة العمل وأداء مسؤوليات الفحص.",
+                            "التمكن من تحديد مسؤولية فريق الارتباط ومساءلتهم عن أعمالهم.",
+                            "الاحتفاظ بملف دائم للأمور ذات الأهمية لعمليات التدقيق المستقبلية.",
+                            "التمكن من القيام بعمليات فحص رقابة الجودة الداخلية بالمكتب.",
+                            "التمكن من القيام بعمليات الفحص والمراجعة الخارجية طبقاً للمتطلبات النظامية."
+                        ]
+                    },
+                    {
+                        heading: "ما يجب تسجيله عند توثيق الإجراءات",
+                        items: [
+                            "الخصائص المحددة للبنود أو الأمور التي تم اختبارها.",
+                            "الشخص القائم بعمل التدقيق وتاريخ الانتهاء من العمل.",
+                            "الشخص الذي قام بفحص أعمال التدقيق المنفذة وتاريخ ومدى هذا الفحص.",
+                            "المناقشات التي دارت حول الأمور المهمة مع الإدارة والمكلفين بالحوكمة وكيفية التعامل مع أي معلومات غير متسقة."
+                        ]
+                    }
+                ],
+                blanks: [
+                    {
+                        sentence: "يتطلب معيار الجودة إتمام عملية تجميع ملف التدقيق النهائي خلال _____ يوماً بعد تاريخ تقرير التدقيق.",
+                        answer: "60",
+                        hint: "رقم: ستون يوماً"
+                    },
+                    {
+                        sentence: "يجب إعداد أوراق تدقيق كافية تمكن المدقق _____ الذي ليس له اتصال سابق من فهم إجراءات ونتائج التدقيق.",
+                        answer: "الخبير",
+                        hint: "شخص محترف وذو دراية بالمهنة"
+                    },
+                    {
+                        sentence: "بعد استكمال تجميع ملف التدقيق النهائي يجب عدم _____ أو إلغاء أي أوراق قبل انتهاء مدة الاحتفاظ.",
+                        answer: "حذف",
+                        hint: "إتلاف أو إزالة"
+                    }
+                ]
+            },
+            {
+                id: 240,
+                num: "240",
+                title: "مسؤوليات المدقق ذات العلاقة بالاحتيال",
+                color: "#ef4444",
+                guardianName: "كاشف الخبايا والتحايل سيلفا",
+                definitions: [
+                    {
+                        term: "الاحتيال (Fraud) مقابل الخطأ (Error)",
+                        desc: "العامل الجوهري الذي يفرق بين الاحتيال والخطأ هو ما إذا كان الإجراء الأساس الناتج عنه التحريف في البيانات المالية متعمداً (قصدياً) أو غير متعمد."
+                    },
+                    {
+                        term: "تجاوز الإدارة لأدوات الرقابة (Management Override)",
+                        desc: "قدرة الإدارة على التلاعب بالسجلات المحاسبية وتجاوز الضوابط الرقابية المصممة، وتعتبر خطراً كبيراً وملازماً في جميع المنشآت يتطلب استجابات خاصة."
+                    }
+                ],
+                explanation: [
+                    {
+                        heading: "لماذا خطر عدم اكتشاف الاحتيال أعلى من خطر الخطأ؟",
+                        text: "يعتبر خطر عدم اكتشاف أخطاء جوهرية ناتجة عن الاحتيال أعلى بكثير من الخطأ غير المتعمد؛ لأن الاحتيال ينطوي على خطط معقدة ومنظمة لإخفائه، كالتواطؤ، التزوير، الحذف المتعمد للمعاملات، أو التجاوز الممنهج لأدوات الرقابة."
+                    },
+                    {
+                        heading: "المسؤولية الأساسية عن منع واكتشاف الاحتيال",
+                        text: "المسؤولية الأساسية عن منع واكتشاف الاحتيال تقع بالكامل على عاتق الإدارة والمكلفين بالحوكمة من خلال خلق بيئة نزاهة وتطبيق رقابة مشددة. أما مسؤولية المدقق فهي الحصول على تأكيد معقول فقط بأن القوائم تخلو من تحريف جوهري ناتج عن غش أو خطأ."
+                    }
+                ],
+                enumeration: [
+                    {
+                        heading: "متطلبات المدقق ومسؤولياته في مواجهة الاحتيال",
+                        items: [
+                            "المحافظة الصارمة على نزعة الشك المهني وإدراك احتمال وجود غش رغم نزاهة الإدارة السابقة.",
+                            "إجراء مناقشات معمقة بين أعضاء فريق الارتباط حول قابلية القوائم للتحريف بسبب الاحتيال وأماكن تواجده.",
+                            "تنفيذ إجراءات تقدير الخطر والاستفسار من الإدارة والمكلفين بالحوكمة والمدققين الداخليين.",
+                            "تقييم العلاقات غير المتوقعة أو الشاذة المكتشفة بالإجراءات التحليلية.",
+                            "تصميم وتطبيق استجابات شاملة للمخاطر المقدرة عند مستوى القوائم ومستوى الإقرارات.",
+                            "الحصول على إقرارات وإفادات مكتوبة من الإدارة بشأن مسؤوليتها عن منع واكتشاف الاحتيال."
+                        ]
+                    }
+                ],
+                blanks: [
+                    {
+                        sentence: "العامل الأساسي الذي يفرق بين الاحتيال والخطأ هو ما إذا كان الإجراء _____ أو غير متعمد.",
+                        answer: "متعمداً",
+                        hint: "عن قصد وترصد"
+                    },
+                    {
+                        sentence: "المسؤولية الأساسية عن منع واكتشاف الاحتيال تقع على عاتق _____ والمكلفين بالحوكمة.",
+                        answer: "الإدارة",
+                        hint: "الجهة المسؤولة عن تسيير المنشأة"
+                    },
+                    {
+                        sentence: "خطر عدم اكتشاف الاحتيال أعلى من الخطأ لأن الاحتيال ينطوي عادة على _____ وتزوير لإخفائه.",
+                        answer: "تواطؤ",
+                        hint: "اتفاق سري بين شخصين أو أكثر"
+                    }
+                ]
+            },
+            {
+                id: 250,
+                num: "250",
+                title: "مراعاة القوانين والأنظمة عند تدقيق البيانات المالية",
+                color: "#8b5cf6",
+                guardianName: "قاضي الشرعية النظامية جستس",
+                definitions: [
+                    {
+                        term: "القوانين ذات الأثر المباشر",
+                        desc: "الأنظمة واللوائح الضريبية والتقاعدية التي تؤثر مباشرة في احتساب وتحديد مبالغ وإفصاحات جوهرية في البيانات المالية."
+                    },
+                    {
+                        term: "القوانين والأنظمة الأخرى (الأثر غير المباشر)",
+                        desc: "قوانين تشغيلية وتنظيمية (مثل التراخيص وحماية البيئة والسلامة المهنية) لا تؤثر مباشرة على الأرقام، لكن عدم الالتزام بها يفرض غرامات أو يهدد استمرار المنشأة."
+                    }
+                ],
+                explanation: [
+                    {
+                        heading: "انعكاسات عدم الالتزام على رأي المدقق (تقرير التدقيق)",
+                        text: "1) إذا كان لعدم الالتزام أثر جوهري ولم تعكسه القوائم بصورة كافية: يصدر المدقق رأياً متحفظاً أو رأياً معارضاً. 2) إذا منعت الإدارة المدقق من الحصول على أدلة كافية لتقييم المخالفة: يصدر رأياً متحفظاً أو يمتنع عن إبداء الرأي لقيود النطاق."
+                    },
+                    {
+                        heading: "إجراءات المدقق عند التعرف على عدم التزام أو الشك فيه",
+                        text: "يجب الحصول على فهم كامل لطبيعة التصرف والظروف، وجمع معلومات إضافية ومناقشة الأمر مع الإدارة والمكلفين بالحوكمة، واستشارة محامي المنشأة أو الحصول على استشارة قانونية مستقلة إذا تطلب الأمر."
+                    }
+                ],
+                enumeration: [
+                    {
+                        heading: "أمثلة سياسات الإدارة لمنع واكتشاف عدم الالتزام بالأنظمة",
+                        items: [
+                            "متابعة المتطلبات القانونية والتأكد من تصميم إجراءات التشغيل لتحقيقها.",
+                            "تصميم وتشغيل نظم رقابة داخلية مناسبة.",
+                            "وضع قواعد للسلوك الأخلاقي والإعلان عنها واتباعها وتدريب العاملين عليها.",
+                            "متابعة الالتزام بقواعد السلوك واتخاذ إجراءات تأديبية بحق المخالفين.",
+                            "إشراك مستشارين قانونيين للمساعدة في متابعة المتطلبات القانونية.",
+                            "الاحتفاظ بسجل للأنظمة واللوائح الهامة الخاصة بصناعة المنشأة."
+                        ]
+                    }
+                ],
+                blanks: [
+                    {
+                        sentence: "إذا توصل المدقق إلى أن عدم الالتزام له تأثير جوهري ولم تعكسه القوائم فيصدر رأياً متحفظاً أو رأياً _____ .",
+                        answer: "معارضاً",
+                        hint: "عكسي / سلبي"
+                    },
+                    {
+                        sentence: "إذا منعت الإدارة المدقق من الحصول على الأدلة الكافية لتقييم عدم الالتزام، يقرر إبداء رأي متحفظ أو _____ عن إبداء الرأي.",
+                        answer: "يمتنع",
+                        hint: "حجب الرأي لعدم كفاية الأدلة"
+                    },
+                    {
+                        sentence: "يهدف المدقق للحصول على أدلة كافية ومناسبة عن الالتزام بالأنظمة ذات التأثير _____ على تحديد المبالغ والإفصاحات.",
+                        answer: "المباشر",
+                        hint: "عكس غير المباشر"
+                    }
+                ]
+            },
+            {
+                id: 260,
+                num: "260",
+                title: "الاتصال بالمكلفين بالحوكمة",
+                color: "#0284c7",
+                guardianName: "سفير الحوكمة الرشيدة هيرميز",
+                definitions: [
+                    {
+                        term: "المكلفون بالحوكمة (Those Charged With Governance)",
+                        desc: "الشخص أو الأشخاص أو المنظمات (مثل مجلس الإدارة أو لجنة التدقيق) المسؤولون عن الإشراف على الاتجاه الاستراتيجي للمنشأة والالتزامات المتعلقة بمساءلة المنشأة وعملية إعداد التقارير المالية."
+                    },
+                    {
+                        term: "الاتصال المتبادل الفعال",
+                        desc: "حوار ثنائي الاتجاه يساعد المدقق في الحصول على معلومات ذات صلة، ويساعد المكلفين بالحوكمة في الوفاء بمسؤولياتهم الرقابية وتخفيض مخاطر التحريف الجوهري."
+                    }
+                ],
+                explanation: [
+                    {
+                        heading: "أشكال وتوقيت الاتصال",
+                        text: "يجب على المدقق إبلاغ المكلفين بالحوكمة 'كتابةً' بالنتائج الهامة المستخلصة من عملية التدقيق إذا كان الاتصال الشفوي غير كافٍ. كما يجب أن يكون الاتصال بشأن الاستقلالية (في المنشآت المدرجة) كتابياً وفي الوقت المناسب."
+                    },
+                    {
+                        heading: "الصعوبات الهامة الواجب إبلاغها",
+                        text: "يجب إبلاغهم بأي صعوبات كبيرة واجهت التدقيق: كتأخيرات الإدارة في توفير المعلومات، اختصار الوقت دون مبرر، القيود المفروضة على المدقق، أو عدم رغبة الإدارة في تقديم تقدير لقدرة المنشأة على الاستمرارية."
+                    }
+                ],
+                enumeration: [
+                    {
+                        heading: "الأمور الإلزامية الواجب إبلاغها للمكلفين بالحوكمة",
+                        items: [
+                            "مسؤوليات المدقق فيما يتعلق بتدقيق القوائم المالية وإبداء الرأي، وأن التدقيق لا يعفي الإدارة من مسؤولياتها.",
+                            "نظرة عامة على النطاق والتوقيت المخطط لعملية التدقيق ومناقشة قضايا الخطر والأهمية النسبية.",
+                            "وجهة نظر المدقق في الجوانب النوعية الهامة للممارسات والسياسات والتقديرات المحاسبية للمنشأة.",
+                            "الصعوبات الهامة التي واجهت المدقق خلال العمل والقيود المفروضة.",
+                            "الأمور الهامة التي نوقشت مع الإدارة ومخاوف استشارات الإدارة مع محاسبين آخرين.",
+                            "تأكيد الاستقلالية والضمانات المطبقة لمواجهة المهددات (خاصة في الكيانات المدرجة)."
+                        ]
+                    }
+                ],
+                blanks: [
+                    {
+                        sentence: "يجب على المدقق إبلاغ المكلفين بالحوكمة _____ بالنتائج الهامة إذا رأى أن الاتصال الشفوي غير كافٍ.",
+                        answer: "كتابة",
+                        hint: "عكس شفوياً"
+                    },
+                    {
+                        sentence: "الاتصال بشأن النطاق والتوقيت يساعد المكلفين بالحوكمة على مناقشة قضايا الخطر ومفهوم _____ النسبية.",
+                        answer: "الأهمية",
+                        hint: "المادية والجوهرية"
+                    },
+                    {
+                        sentence: "في المنشآت المدرجة يقدم المدقق بياناً كتابياً يؤكد التزام فريق الارتباط بقواعد السلوك المتعلقة بـ _____ .",
+                        answer: "الاستقلال",
+                        hint: "الحياد وعدم الانحياز"
+                    }
+                ]
+            },
+            {
+                id: 265,
+                num: "265",
+                title: "إبلاغ أوجه القصور في الرقابة الداخلية",
+                color: "#d97706",
+                guardianName: "مهندس الحصون الرقابية كارفن",
+                definitions: [
+                    {
+                        term: "أوجه القصور في الرقابة الداخلية (Internal Control Deficiency)",
+                        desc: "حالة تحدث عندما تكون أداة الرقابة مصممة أو مشغلة بطريقة لا تمنع أو تكتشف وتصحح التحريفات في البيانات المالية في الوقت المناسب، أو عند غياب أداة رقابة ضرورية."
+                    },
+                    {
+                        term: "القصور المهم في الرقابة (Significant Deficiency)",
+                        desc: "قصور أو مجموعة من أوجه القصور في الرقابة الداخلية، يعد في الحكم المهني للمدقق ذا أهمية بالغة تجعله جديراً بعناية واهتمام المكلفين بالحوكمة."
+                    }
+                ],
+                explanation: [
+                    {
+                        heading: "هدف دراسة الرقابة الداخلية في هذا المعيار",
+                        text: "يحصل المدقق على فهم للرقابة الداخلية بهدف تصميم إجراءات تدقيق مناسبة للظروف، وليس لغرض إبداء رأي عن فعالية الرقابة الداخلية للمنشأة ككل."
+                    },
+                    {
+                        heading: "المستوى الإداري المناسب للتبليغ",
+                        text: "يجب إبلاغ المستوى الإداري الذي يمتلك الصلاحية والمسؤولية لاتخاذ الإجراء التصحيحي (كالرئيس التنفيذي أو المالي)، إلا إذا كان القصور يمس نزاهة أو كفاءة الإدارة ذاتها، فعندئذ يُرفع مباشرة للمكلفين بالحوكمة."
+                    }
+                ],
+                enumeration: [
+                    {
+                        heading: "عوامل تحديد ما إذا كان القصور يمثل 'قصوراً مهماً'",
+                        items: [
+                            "احتمال أن تؤدي أوجه القصور إلى تحريفات جوهرية في البيانات المالية مستقبلاً.",
+                            "قابلية الأصل أو الالتزام المرتبط للخسارة أو الاحتيال.",
+                            "التحديد الذاتي والمعقد للمبالغ التقديرية (مثل تقديرات القيمة العادلة).",
+                            "حجم وحساسية التعاملات التي حدثت أو يمكن أن تحدث في الحسابات المعرضة للقصور.",
+                            "أهمية أدوات الرقابة المعطلة لعملية إعداد التقارير المالية ككل.",
+                            "سبب وتكرار الاستثناءات المكتشفة نتيجة هذا القصور وتفاعله مع أدوات رقابية أخرى."
+                        ]
+                    },
+                    {
+                        heading: "المحتويات الإلزامية للتبليغ المكتوب عن أوجه القصور الهامة",
+                        items: [
+                            "وصف مفصل لأوجه القصور وشرح وافٍ لتأثيراتها المحتملة على القوائم المالية.",
+                            "توضيح أن غرض التدقيق هو إبداء رأي على البيانات المالية وليس إبداء رأي على فعالية الرقابة الداخلية.",
+                            "توضيح أن الأمور المبلغ عنها تقتصر فقط على أوجه القصور التي لاحظها المدقق واعتبرها جديرة بالاهتمام."
+                        ]
+                    }
+                ],
+                blanks: [
+                    {
+                        sentence: "يجب على المدقق إبلاغ المكلفين بالحوكمة والإدارة بأوجه القصور المهمة في الرقابة الداخلية بشكل _____ .",
+                        answer: "كتابي",
+                        hint: "خطاب رسمي مكتوب"
+                    },
+                    {
+                        sentence: "فهم الرقابة الداخلية يتم لتصميم إجراءات التدقيق وليس لغرض إبداء _____ عن فعالية الرقابة الداخلية.",
+                        answer: "رأي",
+                        hint: "حكم مهني تقريري"
+                    },
+                    {
+                        sentence: "القصور المهم هو قصور يعد في الحكم المهني للمدقق ذا أهمية كافية تجعله جديراً بعناية المكلفين بـ _____ .",
+                        answer: "الحوكمة",
+                        hint: "الإشراف والرقابة العليا"
+                    }
+                ]
+            },
+            {
+                id: 300,
+                num: "300",
+                title: "التخطيط لتدقيق البيانات المالية",
+                color: "#6366f1",
+                guardianName: "خبير الاستراتيجيات والموازين تيمور",
+                definitions: [
+                    {
+                        term: "استراتيجية التدقيق العامة (Overall Audit Strategy)",
+                        desc: "تحدد نطاق وتوقيت وتوجيه التدقيق، وترشد في تطوير خطة التدقيق من خلال تحديد الموارد اللازمة وتوزيعها على مجالات الخطر."
+                    },
+                    {
+                        term: "خطة التدقيق (Audit Plan)",
+                        desc: "خطة أكثر تفصيلاً من الاستراتيجية، تصف طبيعة وتوقيت ومدى إجراءات تقدير الخطر، وإجراءات التدقيق الإضافية عند مستوى التأكيد."
+                    }
+                ],
+                explanation: [
+                    {
+                        heading: "طبيعة عملية التخطيط",
+                        text: "لا يعد التخطيط مرحلة منفصلة ومنعزلة عن التدقيق، بل هو عملية مستمرة ومتكررة تبدأ بعد وقت قصير من إكمال عملية التدقيق السابقة (أو بالتزامن معها) وتستمر حتى إكمال ارتباط التدقيق الحالي، مع إمكانية تحديث وتعديل الاستراتيجية والخطة باستمرار."
+                    },
+                    {
+                        heading: "مشاركة الشريك والأعضاء الرئيسيين",
+                        text: "يجب أن يشارك كل من الشريك المسؤول والأعضاء الرئيسيين في التخطيط والمناقشات، للاستفادة من خبراتهم وتعزيز فعالية وكفاءة العملية."
+                    }
+                ],
+                enumeration: [
+                    {
+                        heading: "فوائد التخطيط الكافي لعملية التدقيق",
+                        items: [
+                            "مساعدة المدقق في بذل العناية المناسبة بالجوانب والمجالات المهمة للتدقيق.",
+                            "التعرف على المشاكل والمعوقات المحتملة وحلها في الوقت المناسب.",
+                            "تنظيم وإدارة عملية التدقيق بشكل سليم وتنفيذها بطريقة كفؤة وفعالة.",
+                            "حسن اختيار فريق الارتباط المناسب بقدرات وكفاءات متوافقة مع المخاطر المتوقعة وتوزيع العمل بينهم.",
+                            "تسهيل التوجيه والإشراف على أعضاء الفريق وفحص ومراجعة أعمالهم."
+                        ]
+                    },
+                    {
+                        heading: "الأنشطة المبدئية للارتباط (Initial Engagement Activities)",
+                        items: [
+                            "أداء إجراءات استمرار العلاقة مع العميل والتحقق من عدم وجود قضايا تخص نزاهة الإدارة.",
+                            "تقييم الالتزام الصارم بالمتطلبات الأخلاقية والاستقلالية المهنية.",
+                            "تكوين فهم مشترك ودقيق لشروط الارتباط لضمان عدم وجود سوء تفاهم."
+                        ]
+                    }
+                ],
+                blanks: [
+                    {
+                        sentence: "التخطيط ليس مرحلة منفصلة عن التدقيق، بل هو عملية _____ ومتكررة تستمر حتى إكمال العملية.",
+                        answer: "مستمرة",
+                        hint: "لا تتوقف طوال مراحل العمل"
+                    },
+                    {
+                        sentence: "تكون خطة التدقيق أكثر _____ من الاستراتيجية العامة للتدقيق وتصف الإجراءات التفصيلية.",
+                        answer: "تفصيلاً",
+                        hint: "عكس إجمالاً / عموماً"
+                    },
+                    {
+                        sentence: "من الأنشطة المبدئية للارتباط تقييم الالتزام بالمتطلبات الأخلاقية بما في ذلك _____ .",
+                        answer: "الاستقلالية",
+                        hint: "شرط عدم التبعية لأي طرف"
+                    }
+                ]
+            },
+            {
+                id: 315,
+                num: "315",
+                title: "التعرف على مخاطر الأخطاء الجوهرية وتقديرها من خلال فهم المنشأة وبيئتها",
+                color: "#e11d48",
+                guardianName: "سيد التحليل والبيئة الرقابية إلدور",
+                definitions: [
+                    {
+                        term: "الخطر المتأصل (Inherent Risk)",
+                        desc: "قابلية رصيد حساب أو فئة معاملات للتحريف الذي قد يكون جوهرياً، بافتراض عدم وجود أدوات رقابة داخلية ذات صلة."
+                    },
+                    {
+                        term: "خطر الرقابة (Control Risk)",
+                        desc: "خطر أن تحريفاً جوهرياً قد يحدث ولا يتم منعه، أو اكتشافه وتصحيحه في الوقت المناسب من خلال نظم الرقابة الداخلية بالمنشأة."
+                    },
+                    {
+                        term: "الخطر المهم (Significant Risk)",
+                        desc: "خطر محدد ومقدر لوجود تحريف جوهري، يتطلب في حكم المدقق المهني اعتبارات تدقيق خاصة واستجابات مخصصة."
+                    }
+                ],
+                explanation: [
+                    {
+                        heading: "مستويات تقدير المخاطر",
+                        text: "يُقدر المدقق المخاطر عند مستويين: 1) مستوى البيانات المالية ككل (وهي المخاطر الشاملة التي تؤثر على العديد من الإقرارات وتتعلق بالبيئة الرقابية)، 2) مستوى الإقرار/التأكيد لفئات المعاملات وأرصدة الحسابات والإفصاحات لتحديد إجراءات التدقيق الإضافية."
+                    },
+                    {
+                        heading: "تنقيح وتعديل تقدير المخاطر",
+                        text: "تقدير المخاطر ليس ثابتاً؛ فإذا حصل المدقق أثناء سير التدقيق على أدلة تختلف جوهرياً عما بنى عليه تقديره الأولي، وجب عليه تنقيح التقدير وتعديل إجراءات التدقيق المخططة تبعاً لذلك."
+                    }
+                ],
+                enumeration: [
+                    {
+                        heading: "مجالات فهم المنشأة وبيئتها التي يجب أن يحصل عليها المدقق",
+                        items: [
+                            "فهم الصناعة، واللوائح، والعوامل الخارجية ذات الصلة وإطار التقرير المالي المعمول به.",
+                            "طبيعة المنشأة: عملياتها التشغيلية، وهياكل الملكية والحوكمة، واستثماراتها وطرق تمويلها.",
+                            "اختيار المنشأة للسياسات المحاسبية وتطبيقها وأسباب التغيرات فيها.",
+                            "أهداف واستراتيجيات المنشأة، ومخاطر الأعمال المرتبطة بها والتي قد تؤدي لأخطاء بالقوائم.",
+                            "قياس وفحص الأداء المالي للمنشأة ومقارنته بالموازنات والمنافسين.",
+                            "فهم عناصر الرقابة الداخلية الخمسة (بيئة الرقابة، تقدير المخاطر، نظام المعلومات، أنشطة الرقابة، المتابعة)."
+                        ]
+                    },
+                    {
+                        heading: "العوامل التي يراعيها المدقق عند تحديد 'الخطر المهم'",
+                        items: [
+                            "ما إذا كان الخطر يمثل خطر احتيال أو غش.",
+                            "ارتباط الخطر بتطورات اقتصادية أو محاسبية مهمة حدثت مؤخراً تتطلب اهتماماً خاصاً.",
+                            "مدى تعقد المعاملات المحاسبية والمالية.",
+                            "ما إذا كان الخطر يتضمن معاملات مهمة وكبيرة مع أطراف ذات علاقة.",
+                            "درجة عدم الموضوعية والشك في قياس المعلومات المالية والتقديرات المحاسبية.",
+                            "المعاملات الهامة غير العادية التي تقع خارج المسار الطبيعي لأعمال المنشأة."
+                        ]
+                    }
+                ],
+                blanks: [
+                    {
+                        sentence: "يُقدر المدقق المخاطر عند مستويين: مستوى البيانات المالية ككل ومستوى _____ لفئات المعاملات والأرصدة.",
+                        answer: "الإقرار",
+                        hint: "أو التأكيد / مزاعم الإدارة"
+                    },
+                    {
+                        sentence: "عند تحديد ما إذا كان الخطر يعد خطراً مهماً، يجب على المدقق استبعاد تأثيرات الأدوات _____ ذات العلاقة.",
+                        answer: "الرقابية",
+                        hint: "المتعلقة بنظام الضبط الداخلي"
+                    },
+                    {
+                        sentence: "إجراءات تقدير الخطر تشمل: الاستفسارات، والإجراءات التحليلية، و _____ والتقصي.",
+                        answer: "الملاحظة",
+                        hint: "المشاهدة الميدانية المباشرة"
+                    }
+                ]
+            }
+        ];
 
-</div>
+        /* ============================================================
+           AUDIO ENGINE (Pure Web Audio API - 8-Bit Retro Chimes & Jingle)
+           ============================================================ */
+        class RetroAudio {
+            constructor() {
+                this.ctx = null;
+                this.muted = false;
+            }
+            init() {
+                if (!this.ctx) {
+                    const AudioContext = window.AudioContext || window.webkitAudioContext;
+                    this.ctx = new AudioContext();
+                }
+            }
+            playTone(freq, type = "square", duration = 0.1, gain = 0.1) {
+                if (this.muted) return;
+                this.init();
+                try {
+                    const osc = this.ctx.createOscillator();
+                    const g = this.ctx.createGain();
+                    osc.type = type;
+                    osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+                    g.gain.setValueAtTime(gain, this.ctx.currentTime);
+                    g.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + duration);
+                    osc.connect(g);
+                    g.connect(this.ctx.destination);
+                    osc.start();
+                    osc.stop(this.ctx.currentTime + duration);
+                } catch(e){}
+            }
+            step() {
+                this.playTone(130, "triangle", 0.04, 0.03);
+            }
+            interact() {
+                this.playTone(440, "square", 0.08, 0.08);
+                setTimeout(() => this.playTone(880, "square", 0.12, 0.08), 80);
+            }
+            success() {
+                const notes = [523.25, 659.25, 783.99, 1046.50];
+                notes.forEach((freq, idx) => {
+                    setTimeout(() => this.playTone(freq, "triangle", 0.15, 0.1), idx * 100);
+                });
+            }
+            victory() {
+                const notes = [440, 554, 659, 880, 740, 880, 1108];
+                notes.forEach((freq, idx) => {
+                    setTimeout(() => this.playTone(freq, "sawtooth", 0.25, 0.15), idx * 120);
+                });
+            }
+            toggleMute() {
+                this.muted = !this.muted;
+                return !this.muted;
+            }
+        }
 
-<script>
-// بيانات المحطات (المعايير)
-const stations = [
-  {
-    id: 200, icon: "🎯", title: "الأهداف العامة للمراجعة",
-    story: "📖 وصلت إلى مقر شركة 'النجم الساطع'. المدير المالي يستقبلك ويقول: 'أهلاً بك! قبل أن تبدأ، ما الذي تسعى لتحقيقه من مراجعتك لقوائمنا المالية؟'",
-    questions: [
-      {
-        q: "ما الهدف العام من مراجعة القوائم المالية؟",
-        opts: [
-          "إعداد القوائم المالية بدلاً من الإدارة",
-          "التعبير عن رأي حول ما إذا كانت القوائم المالية مُعدة وفق إطار إعداد مقبول",
-          "اكتشاف جميع الأخطاء والاحتيالات بشكل مطلق",
-          "ضمان نجاح الشركة في المستقبل"
-        ],
-        correct: 1,
-        explain: "الهدف هو التعبير عن رأي حول ما إذا كانت القوائم المالية مُعدة، في جميع النواحي الجوهرية، وفق إطار إعداد مقبول."
-      }
-    ]
-  },
-  {
-    id: 210, icon: "📝", title: "الاتفاق على شروط الارتباط",
-    story: "📖 المدير المالي يطلب منك توقيع عقد. قبل أن توقع، يجب أن تتأكد من أمور مهمة حتى لا تقع في مشاكل!",
-    questions: [
-      {
-        q: "ما الذي يجب على المراجع التأكد منه قبل قبول ارتباط مراجعة؟",
-        opts: [
-          "السعر فقط",
-          "مدى قبول الإدارة لمسؤوليتها عن إعداد القوائم وتوفير المعلومات والرقابة الداخلية",
-          "عدد الموظفين في الشركة",
-          "موقع الشركة الجغرافي"
-        ],
-        correct: 1,
-        explain: "يجب التأكد من قبول الإدارة مسؤوليتها عن: إعداد القوائم، توفير المعلومات، والرقابة الداخلية."
-      }
-    ]
-  },
-  {
-    id: 220, icon: "⭐", title: "جودة المراجعة",
-    story: "📖 شريك المكتب يذكرك: 'الجودة هي أساس عملنا!'. يجب أن تلتزم بأخلاقيات المهنة طوال فترة المراجعة.",
-    questions: [
-      {
-        q: "من يتحمل المسؤولية النهائية عن جودة المراجعة؟",
-        opts: [
-          "المساعدون في فريق المراجعة",
-          "الإدارة",
-          "شريك المراجعة المسؤول عن الارتباط",
-          "الهيئة التنظيمية"
-        ],
-        correct: 2,
-        explain: "شريك الارتباط يتحمل المسؤولية النهائية عن جودة المراجعة وتوجيهها والإشراف عليها."
-      }
-    ]
-  },
-  {
-    id: 230, icon: "📂", title: "توثيق أعمال المراجعة",
-    story: "📖 بعد يوم عمل طويل، يجب عليك توثيق كل ما قمت به. ملف المراجعة هو دليلك ومرجعك!",
-    questions: [
-      {
-        q: "ما الغرض الأساسي من توثيق أعمال المراجعة؟",
-        opts: [
-          "إرضاء الإدارة فقط",
-          "توفير دليل على الإجراءات المتبعة والأدلة المتحصل عليها، ومساعدة الفريق في الإشراف",
-          "زيادة أتعاب المراجع",
-          "إخفاء الأخطاء"
-        ],
-        correct: 1,
-        explain: "التوثيق يوفر دليلاً على الأساس الذي استند إليه الرأي، ويدل على أن المراجعة تمت وفق المعايير."
-      }
-    ]
-  },
-  {
-    id: 240, icon: "🚨", title: "المسؤولية تجاه الاحتيال",
-    story: "📖 لاحظت حركة غريبة في المستندات! يجب أن تكون يقظاً تجاه مخاطر الاحتيال التي قد تشوه القوائم المالية.",
-    questions: [
-      {
-        q: "ما الفرق الجوهري بين الخطأ والاحتيال؟",
-        opts: [
-          "لا يوجد فرق",
-          "الخطأ مقصود والاحتيال غير مقصود",
-          "العمل المسبب للتحريف الجوهري يكون احتيالاً إذا كان مقصوداً، وخطأ إذا كان غير مقصود",
-          "الاحتيال أصغر من الخطأ"
-        ],
-        correct: 2,
-        explain: "الفرق الجوهري هو في القصد: الاحتيال مقصود (كالتلاعب أو الاختلاس)، والخطأ غير مقصود."
-      }
-    ]
-  },
-  {
-    id: 250, icon: "⚖️", title: "مراعاة القوانين والأنظمة",
-    story: "📖 الشركة تعمل في بيئة تنظيمية معقدة. يجب أن تراعي القوانين والأنظمة المؤثرة على القوائم المالية.",
-    questions: [
-      {
-        q: "ما مسؤولية المراجع تجاه عدم الالتزام بالقوانين؟",
-        opts: [
-          "لا توجد أي مسؤولية",
-          "الحصول على يقين معقول بأن القوائم المالية خالية من التحريف الجوهمي الناتج عن عدم الالتزام",
-          "تطبيق القوانين بدلاً من الإدارة",
-          "الإبلاغ عن كل مخالفة بسيطة للسلطات"
-        ],
-        correct: 1,
-        explain: "مسؤولية المراجع هي الحصول على يقين معقول بأن القوائم خالية من التحريف الجوهري الناتج عن عدم الالتزام بالقوانين المؤثرة مباشرة على القوائم."
-      }
-    ]
-  },
-  {
-    id: 260, icon: "🤝", title: "الاتصال بحوكمة الشركة",
-    story: "📖 حان وقت لقاء مجلس الإدارة ولجنة المراجعة. يجب أن تتصل بهم بأمور مهمة تخص المراجعة.",
-    questions: [
-      {
-        q: "ما الأمور التي يجب على المراجع إبلاغ حوكمة الشركة بها؟",
-        opts: [
-          "الأسرار التجارية فقط",
-          "مسؤولية المراجع، نطاق المراجعة وتوقيتها، والمسائل الهامة الناتجة عن المراجعة",
-          "الرواتب الشهرية للموظفين",
-          "خطط التسويق"
-        ],
-        correct: 1,
-        explain: "يشمل الاتصال: مسؤولية المراجع، نطاق المراجعة وتوقيتها، النتائج الهامة، واستقلالية المراجع."
-      }
-    ]
-  },
-  {
-    id: 265, icon: "⚠️", title: "إبلاغ عن أوجه القصور",
-    story: "📖 اكتشفت weaknesses في الرقابة الداخلية! يجب أن تبلغ الإدارة بها بشكل مناسب وفي الوقت المناسب.",
-    questions: [
-      {
-        q: "ما المقصود بأوجه القصور في الرقابة الداخلية؟",
-        opts: [
-          "أخطاء في القوائم المالية",
-          "عيب في تصميم أو تشغيل الرقابة الداخلية يمنع الإدارة من منع أو اكتشاف تحريفات في الوقت المناسب",
-          "احتيال مؤكد من الموظفين",
-          "خسائر الشركة"
-        ],
-        correct: 1,
-        explain: "أوجه القصور هي عيوب في تصميم أو تشغيل الرقابة الداخلية تجعلها غير قادرة على منع أو اكتشاف التحريفات في الوقت المناسب."
-      }
-    ]
-  },
-  {
-    id: 300, icon: "🗺️", title: "تخطيط مراجعة القوائم المالية",
-    story: "📖 قبل أن تبدأ العمل الفعلي، يجب أن تضع خطة استراتيجية محكمة. التخطيط الجيد هو نصف النجاح!",
-    questions: [
-      {
-        q: "ما الهدف من تخطيط المراجعة؟",
-        opts: [
-          "إنهاء المراجعة بأسرع وقت ممكن",
-          "المساعدة في توجيه الجهود نحو المجالات المهمة وتحديد المشاكل المحتملة وتنظيم العمل",
-          "تقليل أتعاب المراجع",
-          "إرضاء الإدارة"
-        ],
-        correct: 1,
-        explain: "التخطيط يساعد على توجيه الاهتمام للمناطق المهمة، اكتشاف المشاكل مبكراً، وتنظيم وإدارة المراجعة بفعالية."
-      }
-    ]
-  },
-  {
-    id: 315, icon: "🔍", title: "فهم الشركة وبيئتها ومخاطر الخطأ الجسيم",
-    story: "📖 أنت الآن في قلب العمل! يجب أن تفهم الشركة وبيئتها لتحديد وتقييم مخاطر التحريف الجوهري في القوائم المالية.",
-    questions: [
-      {
-        q: "ما مكونات مخاطر الخطأ الجوهري (Risk of Material Misstatement)؟",
-        opts: [
-          "خطر المراجعة فقط",
-          "خطر متأصل + خطر رقابة",
-          "خطر اكتشاف فقط",
-          "خطر تشغيلي فقط"
-        ],
-        correct: 1,
-        explain: "مخاطر الخطأ الجوهري = الخطر المتأصل (Inherent Risk) + خطر الرقابة (Control Risk). أما خطر الاكتشاف فيخص المراجع."
-      }
-    ]
-  }
-];
+        const sound = new RetroAudio();
 
-// متغيرات اللعبة
-let currentStationIndex = 0;
-let score = 0;
-let correctCount = 0;
-let wrongCount = 0;
-let completedStations = [];
-let answeredQuestions = {};
+        /* ============================================================
+           GAME STATE & PLAYER CLASS
+           ============================================================ */
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
 
-// بدء اللعبة
-function startGame() {
-  currentStationIndex = 0;
-  score = 0;
-  correctCount = 0;
-  wrongCount = 0;
-  completedStations = [];
-  answeredQuestions = {};
-  showStation();
-}
+        const GameState = {
+            currentChamberIdx: 0,
+            completedStandards: new Set(),
+            exp: 0,
+            chamberProgress: {
+                definitions: false,
+                explanation: false,
+                enumeration: false,
+                blanks: false
+            },
+            dialogueActive: false,
+            activeModal: null
+        };
 
-// عرض المحطة
-function showStation() {
-  if (currentStationIndex >= stations.length) {
-    showFinal();
-    return;
-  }
-  const station = stations[currentStationIndex];
-  document.getElementById('stationIcon').textContent = station.icon;
-  document.getElementById('standardNum').textContent = 'ISA ' + station.id;
-  document.getElementById('stationTitle').textContent = station.title;
-  document.getElementById('storyText').innerHTML = station.story;
-  
-  const question = station.questions[0];
-  document.getElementById('questionText').textContent = question.q;
-  
-  const container = document.getElementById('optionsContainer');
-  container.innerHTML = '';
-  question.opts.forEach((opt, idx) => {
-    const div = document.createElement('div');
-    div.className = 'option';
-    div.textContent = opt;
-    div.onclick = () => selectAnswer(idx);
-    container.appendChild(div);
-  });
-  
-  document.getElementById('feedback').className = 'feedback';
-  document.getElementById('feedback').innerHTML = '';
-  document.getElementById('nextBtn').style.display = 'none';
-  
-  // تحديث الإحصائيات
-  updateStats();
-  updateProgress();
-  
-  showScreen('stationScreen');
-}
+        // Try load saved game
+        try {
+            const saved = localStorage.getItem('auditor_legend_save');
+            if (saved) {
+                const parsed = JSON.parse(saved);
+                GameState.currentChamberIdx = parsed.currentChamberIdx || 0;
+                GameState.completedStandards = new Set(parsed.completedStandards || []);
+                GameState.exp = parsed.exp || 0;
+            }
+        } catch(e){}
 
-// اختيار إجابة
-function selectAnswer(idx) {
-  const station = stations[currentStationIndex];
-  const question = station.questions[0];
-  const options = document.querySelectorAll('.option');
-  const feedback = document.getElementById('feedback');
-  
-  // منع الإجابة المتكررة
-  if (answeredQuestions[station.id]) return;
-  answeredQuestions[station.id] = true;
-  
-  options.forEach((opt, i) => {
-    opt.classList.add('disabled');
-    if (i === question.correct) opt.classList.add('correct');
-    if (i === idx && idx !== question.correct) opt.classList.add('wrong');
-  });
-  
-  if (idx === question.correct) {
-    score += 10;
-    correctCount++;
-    feedback.className = 'feedback correct show';
-    feedback.innerHTML = '✅ <strong>إجابة صحيحة!</strong><br>' + question.explain;
-  } else {
-    wrongCount++;
-    feedback.className = 'feedback wrong show';
-    feedback.innerHTML = '❌ <strong>إجابة خاطئة</strong><br>الإجابة الصحيحة: <strong>' + question.opts[question.correct] + '</strong><br>' + question.explain;
-  }
-  
-  completedStations.push(station.id);
-  document.getElementById('nextBtn').style.display = 'inline-block';
-  updateStats();
-}
+        function saveGame() {
+            try {
+                localStorage.setItem('auditor_legend_save', JSON.stringify({
+                    currentChamberIdx: GameState.currentChamberIdx,
+                    completedStandards: Array.from(GameState.completedStandards),
+                    exp: GameState.exp
+                }));
+            } catch(e){}
+        }
 
-// المحطة التالية
-function nextStation() {
-  currentStationIndex++;
-  if (currentStationIndex >= stations.length) {
-    showFinal();
-  } else {
-    showStation();
-  }
-}
+        // Chamber map grid size
+        const COLS = 26;
+        const ROWS = 16;
+        let TILE_SIZE = 32;
 
-// تحديث الإحصائيات
-function updateStats() {
-  document.getElementById('score').textContent = score;
-  document.getElementById('correct').textContent = correctCount;
-  document.getElementById('wrong').textContent = wrongCount;
-}
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            // Adaptive tile size to guarantee fitting room with atmospheric borders
+            const scaleX = canvas.width / (COLS * 32);
+            const scaleY = canvas.height / (ROWS * 32);
+            const scale = Math.min(scaleX, scaleY);
+            TILE_SIZE = Math.max(22, Math.floor(32 * scale));
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
 
-// تحديث شريط التقدم
-function updateProgress() {
-  const percent = Math.round((currentStationIndex / stations.length) * 100);
-  const fill = document.getElementById('progressFill');
-  fill.style.width = percent + '%';
-  fill.textContent = percent + '%';
-}
+        // Player Entity
+        const Player = {
+            gridX: 13,
+            gridY: 13,
+            x: 13 * 32,
+            y: 13 * 32,
+            dir: 'up', // up, down, left, right
+            moving: false,
+            frame: 0,
+            frameTimer: 0,
+            speed: 3.8,
+            resetPosition() {
+                this.gridX = 13;
+                this.gridY = 13;
+                this.x = this.gridX * TILE_SIZE;
+                this.y = this.gridY * TILE_SIZE;
+                this.dir = 'up';
+            }
+        };
 
-// عرض الخريطة
-function showMap() {
-  const grid = document.getElementById('mapGrid');
-  grid.innerHTML = '';
-  stations.forEach((station, idx) => {
-    const div = document.createElement('div');
-    let cls = 'map-station';
-    if (completedStations.includes(station.id)) cls += ' completed';
-    else if (idx === currentStationIndex) cls += ' current';
-    div.className = cls;
-    div.innerHTML = '<span class="icon">' + station.icon + '</span><div class="num">ISA ' + station.id + '</div><div class="name">' + station.title + '</div>';
-    if (completedStations.includes(station.id)) {
-      div.onclick = () => { alert('✅ تم إكمال هذه المحطة بنجاح!'); };
-    } else if (idx === currentStationIndex) {
-      div.onclick = () => showStation();
-    } else {
-      div.onclick = () => { alert('🔒 أكمل المحطة الحالية أولاً!'); };
-    }
-    grid.appendChild(div);
-  });
-  document.getElementById('mapScore').textContent = score;
-  document.getElementById('mapCorrect').textContent = correctCount;
-  document.getElementById('mapStations').textContent = completedStations.length + '/10';
-  showScreen('mapScreen');
-}
+        // Interactive Stations in the current Chamber
+        function getChamberStations() {
+            return [
+                {
+                    id: 'definitions',
+                    type: 'definitions',
+                    name: 'محراب التعاريف',
+                    icon: '📖',
+                    gridX: 6,
+                    gridY: 5,
+                    color: '#f59e0b',
+                    desc: 'تفقد وضبط كافة المصطلحات والتعاريف المعتمدة في هذا المعيار'
+                },
+                {
+                    id: 'explanation',
+                    type: 'explanation',
+                    name: 'مسلة الشرح والتحليل',
+                    icon: '📜',
+                    gridX: 19,
+                    gridY: 5,
+                    color: '#3b82f6',
+                    desc: 'دراسة وتأصيل الشروحات الفنية والآليات التدقيقية المعمقة'
+                },
+                {
+                    id: 'enumeration',
+                    type: 'enumeration',
+                    name: 'لوح التعداد والمتطلبات',
+                    icon: '🏛️',
+                    gridX: 6,
+                    gridY: 10,
+                    color: '#10b981',
+                    desc: 'قوائم الحصر والتعداد للمسؤوليات والمتطلبات الإلزامية'
+                },
+                {
+                    id: 'blanks',
+                    type: 'blanks',
+                    name: 'بوابة الفراغات الامتحانية',
+                    icon: '🗝️',
+                    gridX: 19,
+                    gridY: 10,
+                    color: '#8b5cf6',
+                    desc: 'حل الفراغات الامتحانية لاختبار استيعابك للمصطلحات الجوهرية'
+                },
+                {
+                    id: 'guardian',
+                    type: 'guardian',
+                    name: STANDARDS_DATA[GameState.currentChamberIdx].guardianName,
+                    icon: '🧙‍♂️',
+                    gridX: 13,
+                    gridY: 4,
+                    color: '#eab308',
+                    desc: 'حارس المعيار ومقيم الجاهزية للعبور إلى المعيار التالي'
+                },
+                {
+                    id: 'portal',
+                    type: 'portal',
+                    name: 'بوابة العبور للمعيار التالي',
+                    icon: '🌀',
+                    gridX: 13,
+                    gridY: 2,
+                    color: '#06b6d4',
+                    desc: 'بوابة الانتقال للأبراج التالية (تفتح بعد إذن الحارس)'
+                }
+            ];
+        }
 
-// الانتقال للمحطة الحالية
-function goToCurrentStation() {
-  if (currentStationIndex >= stations.length) {
-    showFinal();
-  } else {
-    showStation();
-  }
-}
+        /* ============================================================
+           INPUT HANDLING (Keyboard + Touch + Joystick)
+           ============================================================ */
+        const keys = {
+            up: false,
+            down: false,
+            left: false,
+            right: false,
+            action: false
+        };
 
-// شاشة النهاية
-function showFinal() {
-  const total = stations.length;
-  const percent = Math.round((correctCount / total) * 100);
-  let grade, gradeClass, title, message, trophy;
-  
-  if (percent >= 90) {
-    grade = '🏆 ممتاز!';
-    gradeClass = 'excellent';
-    title = 'أنت مراجع Maestro!';
-    message = '🎉 مبروك! لقد أثبتّ جدارتك كمراجع محترف. أنت جاهز لامتحان المعايير الدولية!';
-    trophy = '🏆';
-  } else if (percent >= 70) {
-    grade = '⭐ جيد جداً';
-    gradeClass = 'good';
-    title = 'أداء رائع!';
-    message = '👏 أحسنت! لديك فهم جيد للمعايير. راجع بعض النقاط وستصل للامتياز!';
-    trophy = '⭐';
-  } else if (percent >= 50) {
-    grade = '✅ مقبول';
-    gradeClass = 'pass';
-    title = 'اجتزت الرحلة';
-    message = '💪 جيد! لكن تحتاج لمراجعة أكثر. أعد اللعبة لتثبيت المعلومات.';
-    trophy = '✅';
-  } else {
-    grade = '📚 يحتاج مراجعة';
-    gradeClass = 'fail';
-    title = 'لا تيأس!';
-    message = '📖 المعايير تحتاج دراسة متأنية. راجع الملف وأعد المحاولة. النجاح قادم!';
-    trophy = '📚';
-  }
-  
-  document.getElementById('trophyIcon').textContent = trophy;
-  document.getElementById('finalTitle').textContent = title;
-  document.getElementById('finalMessage').textContent = message;
-  document.getElementById('finalGrade').textContent = grade;
-  document.getElementById('finalGrade').className = 'grade ' + gradeClass;
-  document.getElementById('finalScore').textContent = score;
-  document.getElementById('finalCorrect').textContent = correctCount;
-  document.getElementById('finalTotal').textContent = total;
-  
-  showScreen('finalScreen');
-}
+        window.addEventListener('keydown', (e) => {
+            if (GameState.activeModal) {
+                if (e.key === 'Escape') closeModal();
+                return;
+            }
+            if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') { keys.up = true; e.preventDefault(); }
+            if (e.key === 'ArrowDown' || e.key === 's' || e.key === 'S') { keys.down = true; e.preventDefault(); }
+            if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') { keys.left = true; e.preventDefault(); }
+            if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') { keys.right = true; e.preventDefault(); }
+            if (e.key === ' ' || e.key === 'e' || e.key === 'E' || e.key === 'Enter') {
+                triggerAction();
+                e.preventDefault();
+            }
+            if (e.key === 'm' || e.key === 'M') {
+                openCodex();
+            }
+        });
 
-// إعادة اللعبة
-function restartGame() {
-  startGame();
-}
+        window.addEventListener('keyup', (e) => {
+            if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') keys.up = false;
+            if (e.key === 'ArrowDown' || e.key === 's' || e.key === 'S') keys.down = false;
+            if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') keys.left = false;
+            if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') keys.right = false;
+        });
 
-// التنقل بين الشاشات
-function showScreen(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-</script>
+        // Touch button binds
+        function bindTouch(id, keyName) {
+            const btn = document.getElementById(id);
+            if (!btn) return;
+            const start = (e) => { e.preventDefault(); keys[keyName] = true; };
+            const end = (e) => { e.preventDefault(); keys[keyName] = false; };
+            btn.addEventListener('touchstart', start, { passive: false });
+            btn.addEventListener('touchend', end, { passive: false });
+            btn.addEventListener('mousedown', start);
+            btn.addEventListener('mouseup', end);
+            btn.addEventListener('mouseleave', end);
+        }
+        bindTouch('btn-up', 'up');
+        bindTouch('btn-down', 'down');
+        bindTouch('btn-left', 'left');
+        bindTouch('btn-right', 'right');
+
+        document.getElementById('btn-action').addEventListener('click', (e) => {
+            e.preventDefault();
+            triggerAction();
+        });
+
+        /* ============================================================
+           ACTION TRIGGERING & COLLISION LOGIC
+           ============================================================ */
+        let nearbyStation = null;
+
+        function checkNearbyStation() {
+            const stations = getChamberStations();
+            const px = Player.x + TILE_SIZE / 2;
+            const py = Player.y + TILE_SIZE / 2;
+            let closest = null;
+            let minDist = TILE_SIZE * 1.5;
+
+            stations.forEach(st => {
+                const sx = st.gridX * TILE_SIZE + TILE_SIZE / 2;
+                const sy = st.gridY * TILE_SIZE + TILE_SIZE / 2;
+                const dist = Math.hypot(px - sx, py - sy);
+                if (dist < minDist) {
+                    closest = st;
+                    minDist = dist;
+                }
+            });
+
+            nearbyStation = closest;
+            const prompt = document.getElementById('interaction-prompt');
+            const promptText = document.getElementById('prompt-text');
+
+            if (nearbyStation) {
+                prompt.classList.remove('hidden');
+                promptText.textContent = `${nearbyStation.name} [تفاعل]`;
+            } else {
+                prompt.classList.add('hidden');
+            }
+        }
+
+        function triggerAction() {
+            sound.interact();
+            if (GameState.dialogueActive) {
+                nextDialogueStep();
+                return;
+            }
+            if (!nearbyStation) return;
+
+            const curStd = STANDARDS_DATA[GameState.currentChamberIdx];
+
+            if (nearbyStation.type === 'definitions') {
+                openStationModal('محراب التعاريف الأساسية', '📖', curStd.definitions, 'definitions');
+            } else if (nearbyStation.type === 'explanation') {
+                openStationModal('مسلة الشرح والتحليل الفني', '📜', curStd.explanation, 'explanation');
+            } else if (nearbyStation.type === 'enumeration') {
+                openStationModal('لوح التعداد والمتطلبات الإلزامية', '🏛️', curStd.enumeration, 'enumeration');
+            } else if (nearbyStation.type === 'blanks') {
+                openExamModal(curStd);
+            } else if (nearbyStation.type === 'guardian') {
+                interactWithGuardian(curStd);
+            } else if (nearbyStation.type === 'portal') {
+                attemptPortalCross();
+            }
+        }
+
+        /* ============================================================
+           MODAL LOGIC & EXAM RENDERING
+           ============================================================ */
+        function openStationModal(title, icon, items, type) {
+            GameState.activeModal = 'station';
+            document.getElementById('station-title').textContent = title + ` - معيار (${STANDARDS_DATA[GameState.currentChamberIdx].num})`;
+            document.getElementById('station-icon').textContent = icon;
+            const body = document.getElementById('station-body');
+            body.innerHTML = '';
+
+            if (type === 'definitions') {
+                items.forEach((item, idx) => {
+                    const box = document.createElement('div');
+                    box.className = 'bg-gray-800/90 border border-amber-600/40 p-4 rounded-lg shadow';
+                    box.innerHTML = `
+                        <div class="flex items-center gap-2 mb-1.5 text-amber-400 font-bold text-base">
+                            <span class="w-6 h-6 rounded bg-amber-950 border border-amber-500 flex items-center justify-center text-xs text-amber-300 font-mono">${idx + 1}</span>
+                            <span>${item.term}</span>
+                        </div>
+                        <p class="text-gray-300 pr-8 text-sm">${item.desc}</p>
+                    `;
+                    body.appendChild(box);
+                });
+            } else if (type === 'explanation') {
+                items.forEach((item, idx) => {
+                    const box = document.createElement('div');
+                    box.className = 'bg-gray-800/90 border border-cyan-600/40 p-4 rounded-lg shadow';
+                    box.innerHTML = `
+                        <h3 class="text-cyan-400 font-bold text-base mb-2 flex items-center gap-2">
+                            <span>📌</span>
+                            <span>${item.heading}</span>
+                        </h3>
+                        <p class="text-gray-300 pr-6 text-sm leading-relaxed">${item.text}</p>
+                    `;
+                    body.appendChild(box);
+                });
+            } else if (type === 'enumeration') {
+                items.forEach((group, idx) => {
+                    const box = document.createElement('div');
+                    box.className = 'bg-gray-800/90 border border-emerald-600/40 p-4 rounded-lg shadow';
+                    let listHtml = `<h3 class="text-emerald-400 font-bold text-base mb-2 flex items-center gap-2"><span>📋</span><span>${group.heading}</span></h3><ul class="space-y-2 pr-6">`;
+                    group.items.forEach((itm, i) => {
+                        listHtml += `<li class="flex items-start gap-2 text-sm text-gray-300"><span class="text-emerald-400 font-mono text-xs">◈</span><span>${itm}</span></li>`;
+                    });
+                    listHtml += '</ul>';
+                    box.innerHTML = listHtml;
+                    body.appendChild(box);
+                });
+            }
+
+            document.getElementById('station-modal').classList.remove('hidden');
+
+            // Mark station completed
+            GameState.chamberProgress[type] = true;
+            addExp(25);
+        }
+
+        document.getElementById('btn-confirm-station').addEventListener('click', closeModal);
+        document.getElementById('btn-close-station').addEventListener('click', closeModal);
+
+        function openExamModal(curStd) {
+            GameState.activeModal = 'exam';
+            document.getElementById('exam-title').textContent = `بوابة الفراغات: معيار (${curStd.num})`;
+            const body = document.getElementById('exam-body');
+            body.innerHTML = '';
+
+            curStd.blanks.forEach((q, idx) => {
+                const qBox = document.createElement('div');
+                qBox.className = 'bg-gray-800/90 border border-indigo-500/50 p-4 rounded-xl space-y-3';
+
+                // Format sentence with interactive input
+                const parts = q.sentence.split('_____');
+                const sentenceHtml = `
+                    <div class="text-sm sm:text-base font-semibold text-gray-200 flex flex-wrap items-center gap-2 leading-loose">
+                        <span class="text-indigo-400 font-bold font-mono">${idx + 1}.</span>
+                        <span>${parts[0]}</span>
+                        <input type="text" id="blank-input-${idx}" class="blank-input bg-gray-950 border-2 border-indigo-400 focus:border-amber-400 text-amber-300 font-bold px-3 py-1 rounded text-center w-36 outline-none transition" placeholder="اكتب الكلمة..." autocomplete="off">
+                        <span>${parts[1] || ''}</span>
+                    </div>
+                `;
+
+                qBox.innerHTML = `
+                    ${sentenceHtml}
+                    <div class="flex items-center justify-between text-xs text-gray-400 pt-2 border-t border-gray-700/60">
+                        <div class="flex items-center gap-1.5">
+                            <span class="text-amber-400 font-bold">💡 تلميح:</span>
+                            <span>${q.hint}</span>
+                        </div>
+                        <div id="solution-${idx}" class="hidden text-emerald-400 font-bold font-mono">
+                            الإجابة: [ ${q.answer} ]
+                        </div>
+                    </div>
+                `;
+                body.appendChild(qBox);
+            });
+
+            document.getElementById('exam-modal').classList.remove('hidden');
+        }
+
+        document.getElementById('btn-show-solutions').addEventListener('click', () => {
+            const curStd = STANDARDS_DATA[GameState.currentChamberIdx];
+            curStd.blanks.forEach((q, idx) => {
+                const sol = document.getElementById(`solution-${idx}`);
+                if (sol) sol.classList.toggle('hidden');
+                // Fill if empty
+                const input = document.getElementById(`blank-input-${idx}`);
+                if (input && !input.value.trim()) {
+                    input.value = q.answer;
+                    input.classList.add('border-emerald-500');
+                }
+            });
+            showToast('تم إظهار الإجابات النموذجية لمطابقتها ودراستها!');
+        });
+
+        document.getElementById('btn-submit-exam').addEventListener('click', () => {
+            const curStd = STANDARDS_DATA[GameState.currentChamberIdx];
+            let allCorrect = true;
+
+            curStd.blanks.forEach((q, idx) => {
+                const input = document.getElementById(`blank-input-${idx}`);
+                const val = (input ? input.value : '').trim();
+                // Normalized check (handles Arabic alef variants)
+                const normVal = val.replace(/[أإآ]/g, 'ا');
+                const normAns = q.answer.replace(/[أإآ]/g, 'ا');
+
+                if (normVal === normAns || normVal.includes(normAns) || normAns.includes(normVal)) {
+                    input.classList.remove('border-red-500', 'border-indigo-400');
+                    input.classList.add('border-emerald-500', 'bg-emerald-950/40');
+                } else {
+                    allCorrect = false;
+                    input.classList.remove('border-emerald-500', 'border-indigo-400');
+                    input.classList.add('border-red-500', 'bg-red-950/40');
+                }
+            });
+
+            if (allCorrect) {
+                sound.success();
+                GameState.chamberProgress.blanks = true;
+                addExp(50);
+                showToast('ممتاز! تم اجتياز امتحان الفراغات بنجاح تام! 🌟');
+                setTimeout(closeModal, 1200);
+            } else {
+                sound.playTone(180, 'sawtooth', 0.2, 0.1);
+                showToast('توجد فراغات تحتاج تصحيحاً، يمكنك الاستعانة بالتلميح أو كشف الإجابات!');
+            }
+        });
+
+        document.getElementById('btn-close-exam').addEventListener('click', closeModal);
+
+        function closeModal() {
+            document.getElementById('station-modal').classList.add('hidden');
+            document.getElementById('exam-modal').classList.add('hidden');
+            document.getElementById('codex-modal').classList.add('hidden');
+            document.getElementById('dialogue-modal').classList.add('hidden');
+            GameState.activeModal = null;
+        }
+
+        /* ============================================================
+           GUARDIAN DIALOGUE & ROOM ADVANCEMENT
+           ============================================================ */
+        let guardianStep = 0;
+        let dialogueSequence = [];
+
+        function interactWithGuardian(curStd) {
+            GameState.dialogueActive = true;
+            guardianStep = 0;
+            const p = GameState.chamberProgress;
+            const isReady = p.definitions && p.explanation && p.enumeration && p.blanks;
+
+            document.getElementById('guardian-name').textContent = curStd.guardianName;
+
+            if (!isReady) {
+                dialogueSequence = [
+                    `مرحباً بك أيها المدقق في رحاب المعيار رقم (${curStd.num}): «${curStd.title}».`,
+                    `لقد لاحظت أنك لم تكمل استكشاف جميع أركان المعيار بعد!`,
+                    `عليك زيارة: ${!p.definitions ? '• محراب التعاريف ' : ''}${!p.explanation ? '• مسلة الشرح ' : ''}${!p.enumeration ? '• لوح التعداد ' : ''}${!p.blanks ? '• بوابة الفراغات' : ''}.`,
+                    `أتقن هذه الأركان الأربعة أولاً، وسأفتح لك بوابة المعيار التالي بكل فخر!`
+                ];
+            } else {
+                dialogueSequence = [
+                    `ما شاء الله! أرى في عينيك حكمة المدقق الخبير وإحاطة تامة بالمعيار (${curStd.num}).`,
+                    `لقد أتقنت التعاريف، واستوعبت الشروحات، وحفظت التعدادات، واجتزت الفراغات بدقة.`,
+                    `بصفتي ${curStd.guardianName}، أمنحك رسمياً «ختم إتقان المعيار ${curStd.num}»!`,
+                    `البوابة الشمالية مفتوحة الآن لتعبر نحو المعيار التالي. بالتوفيق في امتحانك!`
+                ];
+                // Record completion
+                GameState.completedStandards.add(curStd.num);
+                addExp(100);
+                saveGame();
+                updateHud();
+            }
+
+            renderDialogue();
+            document.getElementById('dialogue-modal').classList.remove('hidden');
+        }
+
+        function renderDialogue() {
+            const txt = document.getElementById('dialogue-text');
+            txt.textContent = dialogueSequence[guardianStep];
+            const btn = document.getElementById('btn-dialogue-action');
+            if (guardianStep >= dialogueSequence.length - 1) {
+                btn.textContent = 'إنهاء الحديث [فهمت] ✓';
+            } else {
+                btn.textContent = 'متابعة ▶';
+            }
+        }
+
+        function nextDialogueStep() {
+            guardianStep++;
+            if (guardianStep < dialogueSequence.length) {
+                renderDialogue();
+            } else {
+                GameState.dialogueActive = false;
+                document.getElementById('dialogue-modal').classList.add('hidden');
+            }
+        }
+
+        document.getElementById('btn-dialogue-action').addEventListener('click', nextDialogueStep);
+
+        function attemptPortalCross() {
+            const curStd = STANDARDS_DATA[GameState.currentChamberIdx];
+            if (!GameState.completedStandards.has(curStd.num)) {
+                showToast('البوابة موصدة! عليك التحدث إلى حارس المعيار والحصول على الختم أولاً.');
+                sound.playTone(150, 'sawtooth', 0.25, 0.1);
+                return;
+            }
+
+            // Move to next chamber
+            if (GameState.currentChamberIdx < STANDARDS_DATA.length - 1) {
+                sound.victory();
+                GameState.currentChamberIdx++;
+                GameState.chamberProgress = { definitions: false, explanation: false, enumeration: false, blanks: false };
+                Player.resetPosition();
+                saveGame();
+                updateHud();
+                showToast(`انتقلت إلى المعيار (${STANDARDS_DATA[GameState.currentChamberIdx].num}): ${STANDARDS_DATA[GameState.currentChamberIdx].title}! 🏰`);
+            } else {
+                // Game Completed!
+                sound.victory();
+                document.getElementById('victory-modal').classList.remove('hidden');
+            }
+        }
+
+        /* ============================================================
+           AUDITOR'S CODEX / FULL DOSSIER
+           ============================================================ */
+        function openCodex(targetStandardNum = null) {
+            GameState.activeModal = 'codex';
+            const tabsContainer = document.getElementById('codex-tabs');
+            tabsContainer.innerHTML = '';
+
+            let activeStd = STANDARDS_DATA[0];
+            if (targetStandardNum) {
+                activeStd = STANDARDS_DATA.find(s => s.num === targetStandardNum) || STANDARDS_DATA[0];
+            } else {
+                activeStd = STANDARDS_DATA[GameState.currentChamberIdx];
+            }
+
+            STANDARDS_DATA.forEach(std => {
+                const btn = document.createElement('button');
+                const isCompleted = GameState.completedStandards.has(std.num);
+                const isCurrent = std.num === activeStd.num;
+
+                btn.className = `pixel-btn px-3 py-1.5 rounded text-xs font-bold whitespace-nowrap flex items-center gap-1 border ${
+                    isCurrent 
+                        ? 'bg-amber-600 border-amber-300 text-white shadow' 
+                        : isCompleted
+                            ? 'bg-emerald-950 border-emerald-600 text-emerald-300'
+                            : 'bg-gray-800 border-gray-700 text-gray-300'
+                }`;
+                btn.innerHTML = `<span>${isCompleted ? '✓' : '◈'}</span><span>معيار ${std.num}</span>`;
+                btn.addEventListener('click', () => {
+                    renderCodexContent(std);
+                    openCodex(std.num);
+                });
+                tabsContainer.appendChild(btn);
+            });
+
+            renderCodexContent(activeStd);
+            document.getElementById('codex-modal').classList.remove('hidden');
+        }
+
+        function renderCodexContent(std) {
+            const cont = document.getElementById('codex-content');
+            cont.innerHTML = `
+                <div class="border-b-2 border-amber-600/50 pb-4 mb-4">
+                    <span class="text-xs bg-amber-950 text-amber-300 px-2 py-0.5 rounded border border-amber-500 font-bold">معيار التدقيق الدولي (ISA ${std.num})</span>
+                    <h2 class="text-xl font-bold text-amber-400 mt-1">${std.title}</h2>
+                </div>
+
+                <!-- SECTION 1: DEFINITIONS -->
+                <div class="space-y-3">
+                    <h3 class="text-base font-bold text-amber-300 flex items-center gap-2 border-r-4 border-amber-500 pr-2">
+                        <span>📖 أولاً: التعاريف والمصطلحات المعتمدة</span>
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        ${std.definitions.map(d => `
+                            <div class="bg-gray-800/80 p-3 rounded-lg border border-gray-700">
+                                <h4 class="text-amber-400 font-bold text-sm mb-1">◈ ${d.term}</h4>
+                                <p class="text-gray-300 text-xs leading-relaxed">${d.desc}</p>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+
+                <!-- SECTION 2: EXPLANATIONS -->
+                <div class="space-y-3 mt-6">
+                    <h3 class="text-base font-bold text-cyan-300 flex items-center gap-2 border-r-4 border-cyan-500 pr-2">
+                        <span>📜 ثانياً: الشرح والتأصيل الفني</span>
+                    </h3>
+                    <div class="space-y-3">
+                        ${std.explanation.map(e => `
+                            <div class="bg-gray-800/80 p-3.5 rounded-lg border border-gray-700">
+                                <h4 class="text-cyan-400 font-bold text-sm mb-1.5">📌 ${e.heading}</h4>
+                                <p class="text-gray-300 text-xs leading-relaxed">${e.text}</p>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+
+                <!-- SECTION 3: ENUMERATIONS -->
+                <div class="space-y-3 mt-6">
+                    <h3 class="text-base font-bold text-emerald-300 flex items-center gap-2 border-r-4 border-emerald-500 pr-2">
+                        <span>🏛️ ثالثاً: التعدادات والمتطلبات الإلزامية</span>
+                    </h3>
+                    <div class="space-y-3">
+                        ${std.enumeration.map(en => `
+                            <div class="bg-gray-800/80 p-3.5 rounded-lg border border-gray-700">
+                                <h4 class="text-emerald-400 font-bold text-sm mb-2">📋 ${en.heading}</h4>
+                                <ul class="space-y-1.5 pr-4 text-xs text-gray-300">
+                                    ${en.items.map(it => `<li class="flex items-start gap-2"><span class="text-emerald-400">✔</span><span>${it}</span></li>`).join('')}
+                                </ul>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+
+                <!-- SECTION 4: BLANKS & SOLUTIONS -->
+                <div class="space-y-3 mt-6">
+                    <h3 class="text-base font-bold text-indigo-300 flex items-center gap-2 border-r-4 border-indigo-500 pr-2">
+                        <span>🗝️ رابعاً: أسئلة الفراغات النموذجية للامتحان</span>
+                    </h3>
+                    <div class="space-y-2">
+                        ${std.blanks.map((b, i) => `
+                            <div class="bg-gray-800/80 p-3 rounded-lg border border-indigo-900/60 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 text-xs">
+                                <div class="text-gray-200"><span class="text-indigo-400 font-mono font-bold">${i+1}.</span> ${b.sentence.replace('_____', `<span class="text-amber-300 underline font-bold px-1">[ ${b.answer} ]</span>`)}</div>
+                                <span class="text-emerald-400 font-bold whitespace-nowrap bg-emerald-950/80 px-2 py-0.5 rounded border border-emerald-800">الحل: ${b.answer}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        document.getElementById('btn-codex').addEventListener('click', () => openCodex());
+        document.getElementById('btn-close-codex').addEventListener('click', closeModal);
+        document.getElementById('btn-victory-codex').addEventListener('click', () => {
+            document.getElementById('victory-modal').classList.add('hidden');
+            openCodex();
+        });
+        document.getElementById('btn-victory-restart').addEventListener('click', () => {
+            document.getElementById('victory-modal').classList.add('hidden');
+            GameState.currentChamberIdx = 0;
+            GameState.completedStandards.clear();
+            GameState.exp = 0;
+            GameState.chamberProgress = { definitions: false, explanation: false, enumeration: false, blanks: false };
+            Player.resetPosition();
+            saveGame();
+            updateHud();
+            showToast('بدأت جولة جديدة في الأبراج! بالتوفيق في دراستك.');
+        });
+
+        document.getElementById('btn-sound').addEventListener('click', () => {
+            const active = sound.toggleMute();
+            document.getElementById('btn-sound').textContent = active ? '🔊' : '🔇';
+            showToast(active ? 'تم تفعيل المؤثرات الصوتية' : 'تم كتم الصوت');
+        });
+
+        /* ============================================================
+           HUD UPDATES & TOAST NOTIFICATION
+           ============================================================ */
+        function updateHud() {
+            const curStd = STANDARDS_DATA[GameState.currentChamberIdx];
+            document.getElementById('chamber-title').textContent = `غرفة المعيار (${curStd.num}): ${curStd.title}`;
+            document.getElementById('standards-progress').textContent = `${GameState.completedStandards.size} / 10`;
+            document.getElementById('player-exp').textContent = GameState.exp;
+        }
+
+        function addExp(pts) {
+            GameState.exp += pts;
+            updateHud();
+            saveGame();
+        }
+
+        let toastTimeout = null;
+        function showToast(msg) {
+            const toast = document.getElementById('game-toast');
+            toast.textContent = msg;
+            toast.classList.remove('hidden');
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 3000);
+        }
+
+        /* ============================================================
+           2D PIXEL ART RENDERER & GAME LOOP
+           ============================================================ */
+        let torchFlicker = 0;
+
+        function update() {
+            if (GameState.activeModal || GameState.dialogueActive) return;
+
+            let dx = 0;
+            let dy = 0;
+            if (keys.up) { dy -= 1; Player.dir = 'up'; }
+            if (keys.down) { dy += 1; Player.dir = 'down'; }
+            if (keys.left) { dx -= 1; Player.dir = 'left'; }
+            if (keys.right) { dx += 1; Player.dir = 'right'; }
+
+            if (dx !== 0 && dy !== 0) {
+                // Diagonal normalization
+                dx *= 0.7071;
+                dy *= 0.7071;
+            }
+
+            if (dx !== 0 || dy !== 0) {
+                Player.moving = true;
+                Player.x += dx * Player.speed;
+                Player.y += dy * Player.speed;
+
+                // Animate walking frames
+                Player.frameTimer++;
+                if (Player.frameTimer > 8) {
+                    Player.frame = (Player.frame + 1) % 4;
+                    Player.frameTimer = 0;
+                    if (Player.frame % 2 === 0) sound.step();
+                }
+
+                // Map Boundaries (keeping inside dungeon walls)
+                const minX = 2 * TILE_SIZE;
+                const maxX = (COLS - 3) * TILE_SIZE;
+                const minY = 3 * TILE_SIZE;
+                const maxY = (ROWS - 2) * TILE_SIZE;
+
+                Player.x = Math.max(minX, Math.min(maxX, Player.x));
+                Player.y = Math.max(minY, Math.min(maxY, Player.y));
+            } else {
+                Player.moving = false;
+                Player.frame = 0;
+            }
+
+            checkNearbyStation();
+        }
+
+        function drawDungeon() {
+            torchFlicker = (torchFlicker + 0.05) % (Math.PI * 2);
+            const flickerIntensity = Math.sin(torchFlicker) * 2;
+
+            // Center game room on screen
+            const offsetX = Math.floor((canvas.width - COLS * TILE_SIZE) / 2);
+            const offsetY = Math.floor((canvas.height - ROWS * TILE_SIZE) / 2);
+
+            ctx.save();
+            ctx.translate(offsetX, offsetY);
+
+            // 1. Draw Floor Tiles
+            for (let r = 0; r < ROWS; r++) {
+                for (let c = 0; c < COLS; c++) {
+                    const isWall = (r === 0 || r === 1 || r === ROWS - 1 || c === 0 || c === 1 || c === COLS - 1 || c === COLS - 2);
+
+                    if (isWall) {
+                        // Brick wall
+                        ctx.fillStyle = (r <= 1) ? '#1f2937' : '#111827';
+                        ctx.fillRect(c * TILE_SIZE, r * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+                        ctx.strokeStyle = '#0f172a';
+                        ctx.lineWidth = 1;
+                        ctx.strokeRect(c * TILE_SIZE, r * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+
+                        // Wall highlights
+                        if (r === 1) {
+                            ctx.fillStyle = '#374151';
+                            ctx.fillRect(c * TILE_SIZE, (r + 1) * TILE_SIZE - 4, TILE_SIZE, 4);
+                        }
+                    } else {
+                        // Floor stone tiles
+                        const isEven = (r + c) % 2 === 0;
+                        ctx.fillStyle = isEven ? '#1e293b' : '#1a2234';
+                        ctx.fillRect(c * TILE_SIZE, r * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+                        ctx.strokeStyle = '#0f172a';
+                        ctx.lineWidth = 0.5;
+                        ctx.strokeRect(c * TILE_SIZE, r * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+                    }
+                }
+            }
+
+            // 2. Central Ornate Audit Rug
+            ctx.fillStyle = '#450a0a';
+            ctx.fillRect(5 * TILE_SIZE, 4 * TILE_SIZE, (COLS - 10) * TILE_SIZE, (ROWS - 7) * TILE_SIZE);
+            ctx.strokeStyle = '#d97706';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(5 * TILE_SIZE, 4 * TILE_SIZE, (COLS - 10) * TILE_SIZE, (ROWS - 7) * TILE_SIZE);
+
+            // Inner gold line
+            ctx.strokeStyle = '#b45309';
+            ctx.lineWidth = 1;
+            ctx.strokeRect(5.5 * TILE_SIZE, 4.5 * TILE_SIZE, (COLS - 11) * TILE_SIZE, (ROWS - 8) * TILE_SIZE);
+
+            // 3. Wall Torches with Animated Glow
+            const torchLocations = [
+                { c: 4, r: 1 }, { c: 9, r: 1 }, { c: 16, r: 1 }, { c: 21, r: 1 },
+                { c: 1, r: 6 }, { c: 1, r: 11 }, { c: COLS - 2, r: 6 }, { c: COLS - 2, r: 11 }
+            ];
+
+            torchLocations.forEach(t => {
+                const tx = t.c * TILE_SIZE + TILE_SIZE / 2;
+                const ty = t.r * TILE_SIZE + TILE_SIZE / 2;
+
+                // Torch Sconce
+                ctx.fillStyle = '#78350f';
+                ctx.fillRect(tx - 3, ty - 2, 6, 12);
+                ctx.fillStyle = '#d97706';
+                ctx.fillRect(tx - 4, ty - 6, 8, 4);
+
+                // Flame Glow Gradient
+                const rad = 28 + flickerIntensity;
+                const glow = ctx.createRadialGradient(tx, ty - 6, 2, tx, ty - 6, rad);
+                glow.addColorStop(0, 'rgba(251, 191, 36, 0.7)');
+                glow.addColorStop(0.4, 'rgba(245, 158, 11, 0.25)');
+                glow.addColorStop(1, 'rgba(245, 158, 11, 0)');
+                ctx.fillStyle = glow;
+                ctx.beginPath();
+                ctx.arc(tx, ty - 6, rad, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Inner Flame Core
+                ctx.fillStyle = '#fef08a';
+                ctx.fillRect(tx - 2, ty - 8, 4, 4);
+            });
+
+            // 4. Draw Interactive Stations
+            const stations = getChamberStations();
+            const curStd = STANDARDS_DATA[GameState.currentChamberIdx];
+
+            stations.forEach(st => {
+                const sx = st.gridX * TILE_SIZE;
+                const sy = st.gridY * TILE_SIZE;
+
+                ctx.save();
+                if (st.type === 'portal') {
+                    // Gateway to next level
+                    const unlocked = GameState.completedStandards.has(curStd.num);
+                    ctx.fillStyle = unlocked ? '#0891b2' : '#374151';
+                    ctx.beginPath();
+                    ctx.arc(sx + TILE_SIZE / 2, sy + TILE_SIZE / 2, TILE_SIZE * 0.75, Math.PI, 0);
+                    ctx.lineTo(sx + TILE_SIZE * 1.25, sy + TILE_SIZE);
+                    ctx.lineTo(sx - TILE_SIZE * 0.25, sy + TILE_SIZE);
+                    ctx.closePath();
+                    ctx.fill();
+                    ctx.strokeStyle = unlocked ? '#22d3ee' : '#6b7280';
+                    ctx.lineWidth = 3;
+                    ctx.stroke();
+
+                    // Magic vortex if unlocked
+                    if (unlocked) {
+                        ctx.fillStyle = '#a5f3fc';
+                        ctx.font = `${Math.floor(TILE_SIZE * 0.7)}px Arial`;
+                        ctx.textAlign = 'center';
+                        ctx.fillText('🌀', sx + TILE_SIZE / 2, sy + TILE_SIZE * 0.75);
+                    } else {
+                        ctx.fillStyle = '#9ca3af';
+                        ctx.font = `${Math.floor(TILE_SIZE * 0.6)}px Arial`;
+                        ctx.textAlign = 'center';
+                        ctx.fillText('🔒', sx + TILE_SIZE / 2, sy + TILE_SIZE * 0.75);
+                    }
+                } else if (st.type === 'guardian') {
+                    // Guardian Pedestal
+                    ctx.fillStyle = '#78350f';
+                    ctx.fillRect(sx, sy + TILE_SIZE * 0.6, TILE_SIZE, TILE_SIZE * 0.4);
+                    ctx.strokeStyle = '#fbbf24';
+                    ctx.strokeRect(sx, sy + TILE_SIZE * 0.6, TILE_SIZE, TILE_SIZE * 0.4);
+
+                    // Guardian Avatar Emoji
+                    ctx.font = `${Math.floor(TILE_SIZE * 0.9)}px Arial`;
+                    ctx.textAlign = 'center';
+                    ctx.fillText(st.icon, sx + TILE_SIZE / 2, sy + TILE_SIZE * 0.7);
+
+                    // Guardian Aura
+                    ctx.fillStyle = '#fef08a';
+                    ctx.font = 'bold 9px Cairo';
+                    ctx.fillText('الحارس', sx + TILE_SIZE / 2, sy - 4);
+                } else {
+                    // Pedestal / Shrine for Knowledge Stations
+                    ctx.fillStyle = '#1e293b';
+                    ctx.fillRect(sx - 4, sy + 4, TILE_SIZE + 8, TILE_SIZE);
+                    ctx.strokeStyle = st.color;
+                    ctx.lineWidth = 2;
+                    ctx.strokeRect(sx - 4, sy + 4, TILE_SIZE + 8, TILE_SIZE);
+
+                    // Gem / Icon on top
+                    ctx.font = `${Math.floor(TILE_SIZE * 0.75)}px Arial`;
+                    ctx.textAlign = 'center';
+                    ctx.fillText(st.icon, sx + TILE_SIZE / 2, sy + TILE_SIZE * 0.7);
+
+                    // Completion Indicator
+                    const isDone = GameState.chamberProgress[st.type];
+                    if (isDone) {
+                        ctx.fillStyle = '#10b981';
+                        ctx.font = 'bold 11px Arial';
+                        ctx.fillText('✓', sx + TILE_SIZE + 2, sy + 10);
+                    }
+
+                    // Label below
+                    ctx.fillStyle = st.color;
+                    ctx.font = 'bold 9px Cairo';
+                    ctx.fillText(st.name.split(' ')[0], sx + TILE_SIZE / 2, sy + TILE_SIZE + 14);
+                }
+                ctx.restore();
+            });
+
+            // 5. Draw Player Character (Pixel Art Auditor)
+            drawPlayer(Player.x, Player.y);
+
+            ctx.restore();
+        }
+
+        function drawPlayer(px, py) {
+            ctx.save();
+            ctx.translate(px, py);
+
+            // Subtle Drop Shadow
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.45)';
+            ctx.beginPath();
+            ctx.ellipse(TILE_SIZE / 2, TILE_SIZE - 2, TILE_SIZE * 0.35, 5, 0, 0, Math.PI * 2);
+            ctx.fill();
+
+            const walkBob = Player.moving ? (Player.frame % 2 === 0 ? -1.5 : 1.5) : 0;
+
+            // Player Suit / Coat
+            ctx.fillStyle = '#1e3a8a'; // Deep Auditor Navy Blue
+            ctx.fillRect(TILE_SIZE * 0.25, TILE_SIZE * 0.4 + walkBob, TILE_SIZE * 0.5, TILE_SIZE * 0.4);
+
+            // Gold tie / badge
+            ctx.fillStyle = '#f59e0b';
+            ctx.fillRect(TILE_SIZE * 0.45, TILE_SIZE * 0.45 + walkBob, TILE_SIZE * 0.1, TILE_SIZE * 0.25);
+
+            // Head / Face
+            ctx.fillStyle = '#fcd34d'; // Skin tone
+            ctx.fillRect(TILE_SIZE * 0.3, TILE_SIZE * 0.15 + walkBob, TILE_SIZE * 0.4, TILE_SIZE * 0.3);
+
+            // Auditor Glasses
+            ctx.fillStyle = '#0f172a';
+            if (Player.dir === 'left') {
+                ctx.fillRect(TILE_SIZE * 0.3, TILE_SIZE * 0.22 + walkBob, 4, 3);
+            } else if (Player.dir === 'right') {
+                ctx.fillRect(TILE_SIZE * 0.6, TILE_SIZE * 0.22 + walkBob, 4, 3);
+            } else if (Player.dir === 'down') {
+                ctx.fillRect(TILE_SIZE * 0.34, TILE_SIZE * 0.22 + walkBob, 4, 3);
+                ctx.fillRect(TILE_SIZE * 0.54, TILE_SIZE * 0.22 + walkBob, 4, 3);
+                ctx.fillRect(TILE_SIZE * 0.42, TILE_SIZE * 0.24 + walkBob, 4, 1);
+            }
+
+            // Hair / Auditor Beret
+            ctx.fillStyle = '#451a03';
+            ctx.fillRect(TILE_SIZE * 0.25, TILE_SIZE * 0.1 + walkBob, TILE_SIZE * 0.5, TILE_SIZE * 0.12);
+
+            // Audit Satchel Bag
+            ctx.fillStyle = '#92400e';
+            ctx.fillRect(TILE_SIZE * 0.15, TILE_SIZE * 0.5 + walkBob, TILE_SIZE * 0.15, TILE_SIZE * 0.25);
+            // Satchel strap
+            ctx.strokeStyle = '#b45309';
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.moveTo(TILE_SIZE * 0.35, TILE_SIZE * 0.4 + walkBob);
+            ctx.lineTo(TILE_SIZE * 0.2, TILE_SIZE * 0.55 + walkBob);
+            ctx.stroke();
+
+            // Animated Legs
+            ctx.fillStyle = '#111827';
+            if (Player.moving) {
+                if (Player.frame === 1) {
+                    ctx.fillRect(TILE_SIZE * 0.3, TILE_SIZE * 0.8, TILE_SIZE * 0.15, TILE_SIZE * 0.2);
+                    ctx.fillRect(TILE_SIZE * 0.55, TILE_SIZE * 0.75, TILE_SIZE * 0.15, TILE_SIZE * 0.15);
+                } else if (Player.frame === 3) {
+                    ctx.fillRect(TILE_SIZE * 0.3, TILE_SIZE * 0.75, TILE_SIZE * 0.15, TILE_SIZE * 0.15);
+                    ctx.fillRect(TILE_SIZE * 0.55, TILE_SIZE * 0.8, TILE_SIZE * 0.15, TILE_SIZE * 0.2);
+                } else {
+                    ctx.fillRect(TILE_SIZE * 0.3, TILE_SIZE * 0.8, TILE_SIZE * 0.15, TILE_SIZE * 0.18);
+                    ctx.fillRect(TILE_SIZE * 0.55, TILE_SIZE * 0.8, TILE_SIZE * 0.15, TILE_SIZE * 0.18);
+                }
+            } else {
+                ctx.fillRect(TILE_SIZE * 0.3, TILE_SIZE * 0.8, TILE_SIZE * 0.15, TILE_SIZE * 0.18);
+                ctx.fillRect(TILE_SIZE * 0.55, TILE_SIZE * 0.8, TILE_SIZE * 0.15, TILE_SIZE * 0.18);
+            }
+
+            ctx.restore();
+        }
+
+        // Main 60 FPS Game Loop
+        function gameLoop() {
+            update();
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawDungeon();
+            requestAnimationFrame(gameLoop);
+        }
+
+        // Initialize HUD and start
+        window.onload = function() {
+            Player.resetPosition();
+            updateHud();
+            requestAnimationFrame(gameLoop);
+            showToast('أهلاً بك في رحاب معايير التدقيق! استكشف الغرفة واجمع الأختام 📜');
+        };
+    </script>
 </body>
 </html>
+```
